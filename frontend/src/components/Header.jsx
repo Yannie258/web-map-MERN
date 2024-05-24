@@ -1,6 +1,11 @@
+// @ts-nocheck
+import { useContext } from 'react';
 import { Link } from '../../node_modules/react-router-dom/dist/index';
+import { UserContext } from '../helpers/UserContext';
 
 function Header() {
+  const { user }  = useContext(UserContext);
+  console.log('user',  user );
   return (
     <div>
       <header className="flex max-sm:justify-around justify-between border-2 p-2 border-indigo-200 border-b-indigo-500">
@@ -11,6 +16,10 @@ function Header() {
             <span className="text-sm underline">Forever young</span>
           </div>
         </a>
+        {/* <div>
+          <button>Sign out</button>
+        </div> */}
+        <div>{!!user && (<span>{ user.user.userName }</span>)}</div>
         <div className="my-2 flex flex-row space-x-2">
           <Link to={'/login'}>
             <button

@@ -6,7 +6,10 @@ const userController = require('../controllers/user.controller')
 // CRUD endpoints and Methods(get,post,...) here
 // --------READ----------------------------------------------------------------:
 // localhost: 5000 / api / v1 / persons / all METHOD: GET - READ
-router.get('/all', userController.all_users)
+router.post('/register', userController.createUser);
+router.post('/login', userController.userLogin);
+
+router.get('/test', userController.getUser);
 // GET one person on Email
 //router.get('/onEmail/:email', personController.onEmail)
 //GET one person on id

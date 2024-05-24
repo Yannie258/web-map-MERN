@@ -4,8 +4,22 @@ const cors = require('cors')
 const Users = require('./routes/user.routes');
 const mongoose = require('mongoose')
 const PORT = process.env.PORT || 8000
+const cookieParser = require('cookie-parser')
+const dotenv = require('dotenv');
 
-app.use(cors())
+const corsOptions = {
+  origin: 'http://127.0.0.1:3000', // Replace with your frontend URL
+  credentials: true,
+};
+
+// need cookieParser middleware before we can do anything with cookies
+app.use(cookieParser());
+//dotenv helps to use file .env
+dotenv.config();
+
+//avoid cors error when a webpage makes a request to a different domains
+app.use(cors(corsOptions));
+// transform request data to json format
 app.use(express.json())
 
 // connect to mongoDB database
@@ -16,7 +30,6 @@ mongoose
   .then(() => console.log('MongoDB connected ... '))
   .catch((err) => console.log(err))
 
-app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

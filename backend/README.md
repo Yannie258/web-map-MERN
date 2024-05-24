@@ -1,2 +1,2 @@
 ## start backend in local
-    npm run start
+    nodemon start

@@ -6,6 +6,8 @@ const mongoose = require('mongoose')
 const PORT = process.env.PORT || 8000
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 dotenv.config();
 const corsOptions = {
@@ -45,7 +47,17 @@ const mongoDbUrl = 'mongodb://127.0.0.1:27017/webmap'
 mongoose
   .connect(mongoDbUrl)
   .then(() => console.log('MongoDB connected ... '))
-  .catch((err) => console.log(err))
+  .catch((err) => console.log(err));
+  
+app.use(
+  session({
+    secret: process.env.JWT_SECRETE_KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: mongoDbUrl }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day
+  })
+);
 
 //Add middleware to handle routes related to data.
 // get object from schema

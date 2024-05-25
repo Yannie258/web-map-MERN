@@ -39,37 +39,36 @@ exports.userLogin = async (req, res) => {
         if (!validPassword) return res.status(400).json('Incorrect password');
 
         // Generate token
-        const token = jwt.sign({ email: user.email, id: user._id }, privateKey, { expiresIn: '1h' });
+        const token = jwt.sign({
+            email: user.email,
+            id: user._id,
+            userName: user.userName
+        }, privateKey, { expiresIn: '1h' });
 
         // Set cookie
-        res.cookie('token', token);
-
-        // Send response
-        res.status(200).json({ message: 'User login successful', token, user });
+        res.cookie('token', token).json(user);
     } catch (err) {
         res.status(500).json({ message: 'Login error', error: err.message });
     }
 
 }
 
-exports.getUserProfile = async (req, res) => { 
-    const { userName, email, password } = req.body;
-     try {
-        //find user
-        const user = await User.findOne({ email})
-        if (!user) return res.status(400).json('User not found or Password is wrong');
+exports.getUserProfile = (req, res) => { 
+    const { token } = req.cookies;
+    if (token) {
+        //decrypt the token
+        jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async(err, data) => { 
+            if (err) throw err;
+            const {userName, email,_id} = await User.findById(data.id)
+            res.json({ userName, email, _id});
+        })
 
-        //validate password
-        const validPassword = await bcrypt.compare(req.body.password, user.password);
-        //const validPassword= await User.findOne({password})//not secure password
-        if (!validPassword) return res.status(400).json('User not found or Password is wrong');
+    } else {
+        res.json(null);
+    }
+}
 
-        //send res
-        res.status(200).json(user);
-    
-  } catch (err) {
-    res.status(500).json('Access profile error', err)
-  }
+exports.editUserProfile = (req, res) => { 
 }
 
 exports.getUser = (req,res)=>{
@@ -78,4 +77,28 @@ exports.getUser = (req,res)=>{
             res.status(200).send(persons)
         })
     .catch((err)=>(res.status(500).send(err)))
+}
+
+exports.userLogOut =   (req,res)=>{
+     try {
+    // Invalidate the session by removing the session document from MongoDB
+
+
+    // Clear the cookie
+    res.clearCookie('token');
+    res.status(200).send({ message: 'Logged out successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error logging out' });
+  }
+}
+
+exports.deleteUser = async (req,res,next)=>{
+   try {
+       await User.findOneAndDelete(req.params.userName);
+       res.clearCookie('token');
+       res.status(200).json('User deleted');
+
+   } catch (error) {
+    next(error)
+   }
 }

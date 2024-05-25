@@ -9,13 +9,17 @@ function RegisterPage() {
 
   const UserRegister = async e => {
     e.preventDefault();
-    console.log(userName, email, password);
-    await axios.post('/register', {
-      userName,
-      email,
-      password
-    });
-    alert('Registered successfully!');
+    try {
+      await axios.post('/register', {
+        userName,
+        email,
+        password
+      });
+      alert('Registered successfully!');
+    } catch (error) {
+      console.log('Login Error:' + error);
+      alert('Login failed, please try again');
+    }
   };
 
   return (
@@ -109,12 +113,14 @@ function RegisterPage() {
                 </label>
               </div>
             </div>
+
             <button
               type="submit"
               className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
             >
               Create an account
             </button>
+
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Already have an account?{' '}
               <Link to={'/login'} className="font-medium text-blue-600 hover:underline dark:text-gray-500">

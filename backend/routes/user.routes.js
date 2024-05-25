@@ -8,8 +8,12 @@ const userController = require('../controllers/user.controller')
 // localhost: 5000 / api / v1 / persons / all METHOD: GET - READ
 router.post('/register', userController.createUser);
 router.post('/login', userController.userLogin);
+router.post('/logout',userController.userLogOut);
 
 router.get('/test', userController.getUser);
+router.get('/profile', userController.getUserProfile);
+router.delete('/delete',userController.deleteUser);
+
 // GET one person on Email
 //router.get('/onEmail/:email', personController.onEmail)
 //GET one person on id

@@ -17,11 +17,11 @@ function LoginPage() {
         email,
         password
      });
-      setUser(data);
+     setUser(data);
       setRedirectToMainPage(true);
       console.log('data', data);
       
-      //alert('Login successful');
+      alert('Login successful');
       // Handle the response data as needed
     } catch (error) {
       console.log('Login Error: ' + error);
@@ -32,8 +32,6 @@ function LoginPage() {
   if (redirectToMainPage) {
     return <Navigate to={'/'} />;
   }
-
-  
 
   return (
     <div className="flex flex-col items-center justify-center mx-auto ">

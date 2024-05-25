@@ -8,7 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import TermAndConditionsPage from './pages/TermAndConditionsPage';
 import { UserContextProvider } from './helpers/UserContext';
 
-axios.defaults.baseURL = 'http://127.0.0.1:5000/api/webmap/v1/users';
+axios.defaults.baseURL = 'http://127.0.0.1:5000/api/webmap/v1/users'; //backend url
 axios.defaults.withCredentials= true;
 
 function App() {

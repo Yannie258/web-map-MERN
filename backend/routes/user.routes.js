@@ -12,7 +12,8 @@ router.post('/logout',userController.userLogOut);
 
 router.get('/test', userController.getUser);
 router.get('/profile', userController.getUserProfile);
-router.delete('/delete',userController.deleteUser);
+router.put('/account/edit/:id', userController.editUserAccount);
+router.delete('/account/delete/:id',userController.deleteUser);
 
 // GET one person on Email
 //router.get('/onEmail/:email', personController.onEmail)

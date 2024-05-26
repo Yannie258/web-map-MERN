@@ -9,7 +9,6 @@ function LoginPage() {
   const [redirectToMainPage, setRedirectToMainPage] = useState(false);
   // @ts-ignore
   const { user, setUser } = useContext(UserContext);
-  console.log('login', user);
 
   const handleUserLogin = async e => {
     e.preventDefault();
@@ -19,21 +18,15 @@ function LoginPage() {
         password
       });
       setUser(data );
-      console.log('data', data);
       alert('Login successful');
       setRedirectToMainPage(true);
-      // Handle the response data as needed
     } catch (error) {
-      console.log('Login Error: ' + error);
       alert('Login failed, please try again');
     }
-    
-      return <Navigate to={'/'} />;
     
   };
 
   if (redirectToMainPage) {
-    console.log('Redirecting to')
     return <Navigate to={'/'} />;
   }
 
@@ -102,6 +95,7 @@ function LoginPage() {
             
             <button
               className="w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+              type='submit'
             >
               Login
             </button>

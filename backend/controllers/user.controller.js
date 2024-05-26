@@ -68,7 +68,18 @@ exports.getUserProfile = (req, res) => {
     }
 }
 
-exports.editUserProfile = (req, res) => { 
+exports.editUserAccount = async(req, res) => { 
+    await User.findByIdAndUpdate(req.params.id,req.body, { new: true })
+      .then((updatedUser) => {
+        if (updatedUser) {
+          res.status(200).json(updatedUser) // Respond with the updated user
+        } else {
+          res.status(404).send('Person not found!')
+        }
+      })
+      .catch((err) => {
+        res.status(500).send(err)
+      })
 }
 
 exports.getUser = (req,res)=>{
@@ -81,9 +92,6 @@ exports.getUser = (req,res)=>{
 
 exports.userLogOut =   (req,res)=>{
      try {
-    // Invalidate the session by removing the session document from MongoDB
-
-
     // Clear the cookie
     res.clearCookie('token');
     res.status(200).send({ message: 'Logged out successfully' });
@@ -92,13 +100,16 @@ exports.userLogOut =   (req,res)=>{
   }
 }
 
-exports.deleteUser = async (req,res,next)=>{
-   try {
-       await User.findOneAndDelete(req.params.userName);
-       res.clearCookie('token');
-       res.status(200).json('User deleted');
+exports.deleteUser = async (req, res) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        if (deletedUser) {
+            res.status(200).json({ message: 'User deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
 
-   } catch (error) {
-    next(error)
-   }
+    } catch (error) {
+        res.status(500).send({ message: 'Error logging out' });
+    }
 }

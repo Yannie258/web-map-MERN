@@ -10,7 +10,8 @@ router.post('/register', userController.createUser);
 router.post('/login', userController.userLogin);
 router.post('/logout',userController.userLogOut);
 
-router.get('/test', userController.getUser);
+router.get('/test', userController.getAllUser);
+router.get('/check-user-exists/:field/:value', userController.getUser);
 router.get('/profile', userController.getUserProfile);
 router.put('/account/edit/:id', userController.editUserAccount);
 router.delete('/account/delete/:id',userController.deleteUser);

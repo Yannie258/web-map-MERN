@@ -9,22 +9,27 @@ const privateKey = process.env.JWT_SECRETE_KEY;
 
 exports.createUser = async (req, res) => {
     try {
-      //generate new password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
-      //create new user
-      const newUser = new User({
-          userName: req.body.userName,
-          email: req.body.email,
-          password:  hashedPassword,
-      })
+        // Check if the user already exists
+        const existingUser = await User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+        //generate new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        //create new user
+        const newUser = new User({
+            userName: req.body.userName,
+            email: req.body.email,
+            password: hashedPassword,
+        })
 
-      //save user and send response
-      const user = await newUser.save();
-      res.status(200).json(user);
-  } catch (err) {
-      res.status(500).json('Register error: ' + err);
-  }
+        //save user and send response
+        const user = await newUser.save();
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json('Register error: ' + err);
+    }
 };
 
 exports.userLogin = async (req, res) => {
@@ -82,12 +87,26 @@ exports.editUserAccount = async(req, res) => {
       })
 }
 
-exports.getUser = (req,res)=>{
+exports.getAllUser = (req,res)=>{
     User.find({})
         .then((persons) => {
             res.status(200).send(persons)
         })
     .catch((err)=>(res.status(500).send(err)))
+}
+
+exports.getUser = async (req, res) => {
+    const { field, value } = req.params;
+    try {
+    // Check if a user with the given field value exists
+    const user = await User.findOne({ [field]: value });
+
+    // Return response indicating whether the user exists
+    res.json({ exists: !!user }); // Send true if user exists, false otherwise
+  } catch (error) {
+    console.error('Error checking user existence:', error);
+    res.status(500).json({ message: 'Internal server error when get user data' });
+  }
 }
 
 exports.userLogOut =   (req,res)=>{

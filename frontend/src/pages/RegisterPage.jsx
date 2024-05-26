@@ -7,6 +7,8 @@ function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [redirectToMainPage, setRedirectToMainPage] = useState(false);
+  const [isUserRegistered, setIsUserRegistered] = useState(false);
+  const [isEmailRegistered, setIsEmailRegistered] = useState(false);
 
   const UserRegister = async e => {
     e.preventDefault();
@@ -20,6 +22,33 @@ function RegisterPage() {
       setRedirectToMainPage(true);
     } catch (error) {
       alert('Login failed, please try again');
+    }
+  };
+
+  const handleUserNameChange = e => {
+    const newUserName = e.target.value;
+    setUserName(newUserName);
+    checkIfUserExists('userName', newUserName);
+  };
+  
+  const handleUserEmailChange = e => {
+    const newUserEmail = e.target.value;
+    setEmail(newUserEmail);
+    checkIfUserExists('email', newUserEmail);
+  };
+
+  // Function to check if the user already exists in the database
+  const checkIfUserExists = async (field, value) => {
+    try {
+      const response = await axios.get(`/check-user-exists/${field}/${value}`);
+      if (field === 'userName') {
+        setIsUserRegistered(response.data.exists);
+      } else if (field === 'email') {
+        setIsEmailRegistered(response.data.exists);
+      }
+    } catch (error) {
+      // Handle error
+      console.error('Error checking user existence:', error);
     }
   };
 
@@ -44,11 +73,12 @@ function RegisterPage() {
                 name="text"
                 id="userName"
                 value={userName}
-                onChange={e => setUserName(e.target.value)}
+                onChange={handleUserNameChange}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="your username"
                 required
               />
+              {isUserRegistered && <p className="text-sm text-red-500 ">*user is already registered</p>}
             </div>
             <div>
               <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -59,11 +89,12 @@ function RegisterPage() {
                 name="email"
                 id="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={handleUserEmailChange}
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
                 required
               />
+              {isEmailRegistered && (<p className="text-sm text-red-500 ">*email is already registered</p> )}
             </div>
             <div>
               <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -140,3 +171,5 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
+
+

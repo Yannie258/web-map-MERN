@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@arcgis/core": "^4.29.10",
+    "@arcgis/map-components": "^4.29.10",
+    "@arcgis/map-components-react": "^4.29.10",
     "@material-tailwind/react": "^2.1.9",
     "axios": "^1.7.2",
     "localforage": "^1.10.0",

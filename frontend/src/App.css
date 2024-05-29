@@ -1,5 +1,14 @@
-a img{
+@import 'https://js.arcgis.com/4.29/@arcgis/core/assets/esri/themes/light/main.css';
+
+a img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+}
+
+.viewMap {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
 }

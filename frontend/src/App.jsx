@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Routes, Route } from '../node_modules/react-router-dom/dist/index'
-import './App.css'
 import MainMap from './components/MainMap';
+import './App.css'
 import LayoutPage from './pages/LayoutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';

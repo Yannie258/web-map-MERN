@@ -11,7 +11,7 @@ export function UserContextProvider({ children }) {
   //This ensures that the profile data is only fetched if the user information is not already available.
   useEffect(() => {
     if (!user) {
-      axios.get('/profile').then(({ data }) => {
+      axios.get('/users/profile').then(({ data }) => {
         setUser(data);
         setIsLoading(true);
       });

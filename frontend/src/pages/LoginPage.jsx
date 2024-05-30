@@ -13,7 +13,7 @@ function LoginPage() {
   const handleUserLogin = async e => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/login', {
+      const { data } = await axios.post('/users/login', {
         email,
         password
       });
@@ -101,7 +101,7 @@ function LoginPage() {
             </button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{' '}
-              <Link to={'/register'} className="font-medium text-blue-600 hover:underline dark:text-gray-500">
+              <Link to={'/users/register'} className="font-medium text-blue-600 hover:underline dark:text-gray-500">
                 Register
               </Link>
             </p>

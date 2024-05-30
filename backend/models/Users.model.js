@@ -15,10 +15,18 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    homeAdress: {
+        type: String,
+        required: false,
+    },
+    favourite: {
+        category: { type: String, required: true }, // Category name
+        location: { type: Schema.Types.ObjectId, ref: 'Categories' }, // Reference to location in Categories collection
     }
   
   
 })
-module.exports = mongoose.model('Users', UserSchema, 'WEB_MAP')
+module.exports = mongoose.model('Users', UserSchema, 'WEB_MAP_USERS')
 //module.exports = mongoose.model("People", PersonSchema, "YOUR COLLECTION");
 // Third parameter should match to your collection name, for example db.<name>.

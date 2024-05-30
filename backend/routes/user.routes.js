@@ -6,15 +6,15 @@ const userController = require('../controllers/user.controller')
 // CRUD endpoints and Methods(get,post,...) here
 // --------READ----------------------------------------------------------------:
 // localhost: 5000 / api / v1 / persons / all METHOD: GET - READ
-router.post('/register', userController.createUser);
-router.post('/login', userController.userLogin);
-router.post('/logout',userController.userLogOut);
+router.post('/users/register', userController.createUser);
+router.post('/users/login', userController.userLogin);
+router.post('/users/logout',userController.userLogOut);
 
-router.get('/test', userController.getAllUser);
-router.get('/check-user-exists/:field/:value', userController.getUser);
-router.get('/profile', userController.getUserProfile);
-router.put('/account/edit/:id', userController.editUserAccount);
-router.delete('/account/delete/:id',userController.deleteUser);
+router.get('/users/test', userController.getAllUser);
+router.get('/users/check-user-exists/:field/:value', userController.getUser);
+router.get('/users/profile', userController.getUserProfile);
+router.put('/users/account/edit/:id', userController.editUserAccount);
+router.delete('/users/account/delete/:id',userController.deleteUser);
 
 // GET one person on Email
 //router.get('/onEmail/:email', personController.onEmail)

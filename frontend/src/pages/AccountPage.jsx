@@ -22,7 +22,7 @@ function AccountPage() {
   }
 
   if (isLoading && !user) {
-    return <Navigate to={'/login'} />;
+    return <Navigate to={'/users/login'} />;
   }
 
   const handleEditUserName = e => {
@@ -42,7 +42,7 @@ function AccountPage() {
   const handleSubmitAccountChange = async e => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`/account/edit/${user._id}`, {
+      const { data } = await axios.put(`/users/account/edit/${user._id}`, {
         email: userEmail,
         userName: userName
       });
@@ -59,7 +59,7 @@ function AccountPage() {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       e.preventDefault();
       try {
-        await axios.delete(`/account/delete/${user._id}`);   
+        await axios.delete(`/users/account/delete/${user._id}`);   
         setUser(null);
         alert('Delete successful');
         setRedirectToMainPage(true);

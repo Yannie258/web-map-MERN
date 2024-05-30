@@ -11,7 +11,7 @@ function Header() {
   const handleUserSignOut = async () => {
     try {
       // Invalidate session on the server side
-      const response = await axios.post('/logout', {}, { withCredentials: true });
+      const response = await axios.post('/users/logout', {}, { withCredentials: true });
 
       if (response.status === 200) {
         // Clear cookies on the client side
@@ -26,7 +26,7 @@ function Header() {
     } catch (error) {
       console.error('An error occurred during logout', error);
     }
-    return <Navigate to={'/'} />;
+    return <Navigate to={'/users/login'} />;
   };
 
   return (
@@ -58,7 +58,7 @@ function Header() {
             </div>
           ) : (
             <div className="flex space-x-2">
-              <Link to={'/login'}>
+              <Link to={'/users/login'}>
                 <button
                   className="select-none rounded-lg bg-blue-500 py-3 px-6 text-center align-middle 
                   font-sans text-xs sm:py-2 sm:px-1 sm:text-sm md:py-3 md:px-6 md:text-xs font-bold uppercase
@@ -69,7 +69,7 @@ function Header() {
                   Sign in
                 </button>
               </Link>
-              <Link to={'/register'}>
+              <Link to={'/users/register'}>
                 <button
                   className="select-none rounded-lg bg-gray-100 py-3 px-6 text-center align-middle 
                   font-sans text-xs sm:py-2 sm:px-1 sm:text-sm md:py-3 md:px-6 md:text-xs font-bold uppercase

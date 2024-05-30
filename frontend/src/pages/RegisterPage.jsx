@@ -20,7 +20,7 @@ function RegisterPage() {
   const UserRegister = async e => {
     e.preventDefault();
     try {
-      await axios.post('/register', {
+      await axios.post('/users/register', {
         userName,
         email,
         password
@@ -47,7 +47,7 @@ function RegisterPage() {
   // Function to check if the user already exists in the database
   const checkIfUserExists = async (field, value) => {
     try {
-      const response = await axios.get(`/check-user-exists/${field}/${value}`);
+      const response = await axios.get(`/users/check-user-exists/${field}/${value}`);
       if (field === 'userName') {
         setIsUserRegistered(response.data.exists);
       } else if (field === 'email') {
@@ -81,7 +81,7 @@ function RegisterPage() {
   };
 
   if (redirectToMainPage) {
-    return <Navigate to={'/login'} />;
+    return <Navigate to={'/'} />;
   }
 
   return (
@@ -210,7 +210,7 @@ function RegisterPage() {
                   I accept the{' '}
                   <Link
                     className="font-medium text-blue-600 hover:underline dark:text-gray-500"
-                    to="/term-and-conditions"
+                    to="/users/term-and-conditions"
                   >
                     Terms and Conditions <span className="text-red-400">* </span>
                   </Link>
@@ -227,7 +227,7 @@ function RegisterPage() {
 
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Already have an account?{' '}
-              <Link to={'/login'} className="font-medium text-blue-600 hover:underline dark:text-gray-500">
+              <Link to={'/users/login'} className="font-medium text-blue-600 hover:underline dark:text-gray-500">
                 Login here
               </Link>
             </p>

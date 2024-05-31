@@ -6,7 +6,10 @@ export const UserContext = createContext({});
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  console.log('context', user);
+  const [categories, setCategories] = useState(null);
+  const [categoriesColor, setCategoriesColor] = useState(null);
+
+  // console.log('context', user);
   //userEffect doesn't support async/await
   //This ensures that the profile data is only fetched if the user information is not already available.
   useEffect(() => {
@@ -16,6 +19,27 @@ export function UserContextProvider({ children }) {
         setIsLoading(true);
       });
     }
-  }, []);
-  return <UserContext.Provider value={{ user, setUser, isLoading }}>{children}</UserContext.Provider>;
+    if (!categories) {
+      const colorMap = {
+        Schulen: '#ff9843',
+        Kindertageseinrichtungen: '#ff6868',
+        Schulsozialarbeit: '#86a7fc',
+        Jugendberufshilfen: '#3468c0'
+      };
+      axios
+        .get('/categories/all')
+        .then(response => {
+          console.log('data', response);
+          // Assuming response.data is an array of places with longitude data
+          setCategories(response.data);
+          setCategoriesColor(colorMap);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+      console.log('object', categories);
+    }
+     
+  }, [user, categories]);
+  return <UserContext.Provider value={{ user, setUser, isLoading, categories, categoriesColor }}>{children}</UserContext.Provider>;
 }

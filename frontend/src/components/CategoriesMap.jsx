@@ -1,8 +1,8 @@
+import MapView from '@arcgis/core/views/MapView';
 import React, { useEffect, useRef } from 'react';
-import MapView from '@arcgis/core/views/MapView.js';
 import ArcGisMap from '@arcgis/core/Map.js';
 
-function Map() {
+function CategoriesMap() {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -32,4 +32,7 @@ function Map() {
   ); 
 }
 
-export default Map
+export default CategoriesMap
+
+
+export default Map;

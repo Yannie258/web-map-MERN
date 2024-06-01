@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Graphic from '@arcgis/core/Graphic.js';
 import ArcGisMap from '@arcgis/core/Map.js';
 import Point from '@arcgis/core/geometry/Point.js';
@@ -9,20 +10,19 @@ import { UserContext } from '../helpers/UserContext';
 
 function Map() {
   const mapRef = useRef(null);
-  // @ts-ignore
-  const { categories, categoriesColor } = useContext(UserContext);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const { user, categories, categoriesColor } = useContext(UserContext);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
   const getSymbolColorForCategory = categoryName => {
     return categoriesColor[categoryName] || '#000000';
   };
 
   // Function to handle category selection
-  const handleCategoryChange = category => {
-    setSelectedCategory(category);
+  const handleCategoryChange = categories => {
+    setSelectedCategories(categories.map(category => category.value));
   };
 
   useEffect(() => {
-    // console.log('object', mapRef);
     if (!mapRef?.current || !categories || categories.length === 0) return;
 
     const map = new ArcGisMap({
@@ -41,16 +41,11 @@ function Map() {
 
     const searchWidget = new Search({
       view: view
-      // source:[]
     });
-    // Adds the search widget below other elements in
-    // the top left corner of the view
     view.ui.add(searchWidget, {
       position: 'top-right',
       index: 2
     });
-
-    console.log('object', categories);
 
     const addGraphics = () => {
       view.graphics.removeAll();
@@ -62,8 +57,9 @@ function Map() {
           });
 
           const pointGraphic = new Graphic({
-            geometry: point,
+            geometry: user ? point : null,
             symbol: {
+              // @ts-ignore
               type: 'simple-marker',
               color: getSymbolColorForCategory(category.name),
               outline: {
@@ -73,7 +69,7 @@ function Map() {
             }
           });
 
-          if (!selectedCategory || category.name === selectedCategory) {
+          if (selectedCategories.length === 0 || selectedCategories.includes(category.name)) {
             view.graphics.add(pointGraphic);
           }
         }
@@ -83,16 +79,14 @@ function Map() {
     addGraphics();
 
     return () => view && view.destroy();
-  }, [mapRef, categories,selectedCategory]);
-
-  // Create a MapView instance (for 2D viewing)
+  }, [mapRef, categories, selectedCategories]);
 
   return (
     <div className="bg-amber-100 w-screen h-screen relative">
-      <div className="filterContainer absolute z-10 bg-white top-20 right-1">
-        <FilterOption handleCategoryChange={handleCategoryChange}></FilterOption>
+      <div className="filterContainer absolute z-10 bg-white top-20 right-0">
+        {user && <FilterOption handleCategoryChange={handleCategoryChange} />}
       </div>
-      <div className="viewMap bg-amber-100" ref={mapRef}></div>;
+      <div className="viewMap bg-amber-100" ref={mapRef}></div>
     </div>
   );
 }

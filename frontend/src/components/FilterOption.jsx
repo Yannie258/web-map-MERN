@@ -24,14 +24,11 @@ function FilterOption({ handleCategoryChange }) {
     }
   });
 
-  const options = [
-    { value: '', label: 'All', color: '#000000' },
-    ...Object.entries(categoriesColor).map(([category, color]) => ({
-      value: category,
-      label: category,
-      color: color
-    }))
-  ];
+  const options = Object.entries(categoriesColor).map(([category, color]) => ({
+    value: category,
+    label: category,
+    color: color
+  }));
 
   const customStyles = {
     option: (provided, state) => ({
@@ -49,18 +46,13 @@ function FilterOption({ handleCategoryChange }) {
     })
   };
 
-  const handleChange = selectedOption => {
-    handleCategoryChange(selectedOption.value);
+  const handleChange = selectedOptions => {
+    handleCategoryChange(selectedOptions || []);
   };
 
   return (
     <div className="flex flex-col space-y-2">
-      <Select
-        defaultValue={options[0]}
-        options={options}
-        styles={customStyles}
-        onChange={handleChange}
-      />
+      <Select isMulti options={options} styles={customStyles} onChange={handleChange} />
     </div>
   );
 }

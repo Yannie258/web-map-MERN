@@ -58,11 +58,11 @@ exports.userLogin = async (req, res) => {
 
 }
 
-exports.getUserProfile = (req, res) => { 
+exports.getUserProfile = async (req, res) => { 
     const { token } = req.cookies;
     if (token) {
         //decrypt the token
-        jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async(err, data) => { 
+        await jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async(err, data) => { 
             if (err) throw err;
             const {userName, email,_id} = await User.findById(data.id)
             res.json({ userName, email, _id});
@@ -87,8 +87,8 @@ exports.editUserAccount = async(req, res) => {
       })
 }
 
-exports.getAllUser = (req,res)=>{
-    User.find({})
+exports.getAllUser = async (req,res)=>{
+    await User.find({})
         .then((persons) => {
             res.status(200).send(persons)
         })
@@ -109,10 +109,10 @@ exports.getUser = async (req, res) => {
   }
 }
 
-exports.userLogOut =   (req,res)=>{
+exports.userLogOut = async (req,res)=>{
      try {
     // Clear the cookie
-    res.clearCookie('token');
+    await res.clearCookie('token');
     res.status(200).send({ message: 'Logged out successfully' });
   } catch (error) {
     res.status(500).send({ message: 'Error logging out' });
@@ -132,3 +132,35 @@ exports.deleteUser = async (req, res) => {
         res.status(500).send({ message: 'Error logging out' });
     }
 }
+
+exports.updateHomeAdressForUser = async (req, res) => {
+    const { id } = req.params;
+    const { homeAdress } = req.body;
+    try {
+        const updatedUser = await User.findByIdAndUpdate(id, { homeAdress }, { new: true });
+        if (updatedUser) {
+            res.status(200).json(updatedUser);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        res.status(500).send({ message: 'Error updating address' });
+    }
+}
+
+exports.updateFavouriteForUser = async (req, res) => {
+     const { id } = req.params;
+    const { favourite } = req.body;
+    try {
+        const updatedUser = await User.findByIdAndUpdate(id, { favourite }, { new: true });
+        if (updatedUser) {
+            res.status(200).json(updatedUser);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        res.status(500).send({ message: 'Error updating address' });
+    }
+}
+
+

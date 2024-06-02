@@ -44,7 +44,7 @@ function Header() {
         <div>
           {user ? (
             <div className="flex items-center space-x-4">
-              <Link className="flex justify-center items-center rounded" to={'/account'}>
+              <Link className="flex justify-center items-center rounded" to={'/users/account'}>
                 <Tooltip content={`Hello, ${user.userName}`} className="bg-blue-gray-50 text-black">
                   <img className="w-10" src="/src/assets/user_icon.svg" alt="user" />
                 </Tooltip>

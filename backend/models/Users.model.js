@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
     userName: {
@@ -16,15 +16,15 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    homeAdress: {
-        type: String,
-        required: false,
+    homeAddress: {
+        address: { type: String, required: true },
+        homeLongitude: { type: String, required: true },
+        homeLatitude: { type: String, required: true },
     },
     favourite: {
         category: { type: String, required: true }, // Category name
-        location: { type: Schema.Types.ObjectId, ref: 'Categories' }, // Reference to location in Categories collection
+        location: { type: Schema.Types.ObjectId, ref: 'Categories' } // Reference to location in Categories collection
     }
-  
   
 })
 module.exports = mongoose.model('Users', UserSchema, 'WEB_MAP_USERS')

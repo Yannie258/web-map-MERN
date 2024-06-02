@@ -102,7 +102,7 @@ function AccountPage() {
                       onClick={handleEditUserName}
                       className="!absolute right-1 top-1 rounded"
                     >
-                      <img src="src/assets/edit.svg" alt="edit" className="w-4" />
+                      <span>edit</span>
                     </Button>
                   ) : (
                     ''
@@ -126,7 +126,7 @@ function AccountPage() {
                       onClick={handleEditUserEmail}
                       className="!absolute right-1 top-1 rounded"
                     >
-                      <img src="src/assets/edit.svg" alt="edit" className="w-4" />
+                      <span>edit</span>
                     </Button>
                   ) : (
                     ''

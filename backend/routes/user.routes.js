@@ -16,18 +16,8 @@ router.get('/users/profile', userController.getUserProfile);
 router.put('/users/account/edit/:id', userController.editUserAccount);
 router.delete('/users/account/delete/:id',userController.deleteUser);
 
-// GET one person on Email
-//router.get('/onEmail/:email', personController.onEmail)
-//GET one person on id
-//router.get('/:id', personController.onId)
-//Create a new person - CREATE
-//router.post('/createSinglePerson', personController.createPerson)
-//UPDATE a person
-//router.put('/updatePerson/:id', personController.updatePerson)
-//DELETE a person
-//router.delete('/deletePerson/:id', personController.deletePerson)
-// * Endpoint as * Method error handling
-//router.get('/*', personController.error)
+// router.put('/users/account/edit/home/:id', userController.updateHomeAdressForUser);
+// router.put('/users/account/edit/favourite/:id', userController.updateFavouriteForUser);
 
 // All routes export
 module.exports = router

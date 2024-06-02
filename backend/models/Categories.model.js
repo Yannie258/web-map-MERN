@@ -30,18 +30,8 @@ const PropertiesSchema = new Schema({
     EMAIL: { type: String },
 })
 
-const FeatureSchema = new Schema({
-    type: {
-        type: String,
-        required: true
-    },
-    properties: PropertiesSchema,
-    geometry: GeoSchema
-})
-
 // Define schemas for each category
 
-// Schools Schema
 const CategoriesSchema = new Schema({
     name: { //datasettype name
         type: String,
@@ -51,7 +41,8 @@ const CategoriesSchema = new Schema({
         type: String,
         required: true,
     },
-    feature: FeatureSchema
+    properties: PropertiesSchema,
+    geometry: GeoSchema
 });
 
 module.exports = mongoose.model('Categories', CategoriesSchema, 'WEB_MAP_CATEGORIES')

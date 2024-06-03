@@ -18,8 +18,8 @@ const UserSchema = new Schema({
     },
     homeAddress: {
         address: { type: String, required: true },
-        homeLongitude: { type: String, required: true },
-        homeLatitude: { type: String, required: true },
+        homeLongitude: { type: String, required: true },//|
+        homeLatitude: { type: String, required: true },//----
     },
     favourite: {
         category: { type: String, required: true }, // Category name

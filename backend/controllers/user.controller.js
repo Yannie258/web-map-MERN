@@ -64,8 +64,8 @@ exports.getUserProfile = async (req, res) => {
         //decrypt the token
         await jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async(err, data) => { 
             if (err) throw err;
-            const {userName, email,_id} = await User.findById(data.id)
-            res.json({ userName, email, _id});
+            const {userName, email,_id, homeAddress, favourite} = await User.findById(data.id)
+            res.json({ userName, email, _id, homeAddress , favourite});
         })
 
     } else {

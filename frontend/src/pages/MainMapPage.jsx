@@ -1,19 +1,18 @@
-
 import Graphic from '@arcgis/core/Graphic.js';
 import ArcGisMap from '@arcgis/core/Map.js';
 import Point from '@arcgis/core/geometry/Point.js';
 import MapView from '@arcgis/core/views/MapView.js';
-import Search from '@arcgis/core/widgets/Search.js';
 import { useContext, useEffect, useRef, useState } from 'react';
 import FilterOption from '../components/FilterOption';
-import { UserContext } from '../helpers/UserContext';
 import SearchWidget from '../components/SearchWidget';
+import { UserContext } from '../helpers/UserContext';
 
 function Map() {
   const mapRef = useRef(null);
-  const { user, categories, categoriesColor } = useContext(UserContext);
+  const { user, setUser, categories, categoriesColor } = useContext(UserContext);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [viewMap, setViewMap] = useState(null);
+  const [selectedHomeAddress, setSelectedHomeAddress] = useState(false);
 
   const getSymbolColorForCategory = categoryName => {
     return categoriesColor[categoryName] || '#000000';
@@ -24,15 +23,21 @@ function Map() {
     setSelectedCategories(categories.map(category => category.value));
   };
 
-  const handleSelectHomePlace = (event) => { 
+  const handleSelectHomePlace = event => {
     event.preventDefault();
     const selectedPlace = event.target.value;
     console.log('click search', selectedPlace);
+  };
 
-  }
+  const removeHomeAddress = () => {
+    setUser(prevUser => ({
+      ...prevUser,
+      homeAddress: null
+    }));
+  };
 
   useEffect(() => {
-    if (!mapRef?.current || !categories || categories.length === 0) return;
+    if (!mapRef?.current || !categories || categories.length === 0 || !user ) return;
 
     const map = new ArcGisMap({
       basemap: 'streets-navigation-vector'
@@ -48,6 +53,7 @@ function Map() {
       }
     });
     setViewMap(view);
+    console.log('test',user);
 
     const addGraphics = () => {
       view.graphics.removeAll();
@@ -89,29 +95,72 @@ function Map() {
               `
             }
           });
+          // more info to annothrt providers:
+          //https://nominatim.openstreetmap.org/reverse?format=json&lat=40.714224&lon=-73.961452
+          //https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
 
           if (selectedCategories.length === 0 || selectedCategories.includes(category.name)) {
             view.graphics.add(pointGraphic);
           }
+
+          
         }
       });
-    };
+
+      // Add a graphic for the home address from user context
+      if (user && user.homeAddress) {
+        console.log(user);
+        const homePoint = new Point({
+          longitude: user.homeAddress.homeLongitude,
+          latitude: user.homeAddress.homeLatitude
+        });
+        const homeGraphic = new Graphic({
+          geometry: homePoint,
+          symbol: {
+            // @ts-ignore
+            type: 'picture-marker',
+            url: 'src/assets/home.svg', // Replace with your home icon URL
+            width: '24px',
+            height: '24px'
+          },
+          popupTemplate: {
+            title: 'Home Address',
+            content: `
+              <ul>
+                <li><b>Address:</b> ${user.homeAddress.address}</li>
+                <li><b>Longitude:</b> ${user.homeAddress.homeLongitude}</li>
+                <li><b>Latitude:</b> ${user.homeAddress.homeLatitude}</li>
+              </ul>
+              <button id='remove-button'>remove</button>
+            `
+          }
+        });
+        view.graphics.add(homeGraphic);
+        // Add event listener for the remove button
+        // view.popup.on('trigger-action', (event) => {
+        //   if (event.action.id === 'remove-home') {
+        //     // Handle removing the home address
+        //     console.log('Remove home address clicked');
+        //     removeHomeAddress();
+        //   }
+        // });
+      };
+    }
 
     addGraphics();
 
     return () => view && view.destroy();
-  }, [mapRef, categories, selectedCategories]);
+  }, [mapRef, categories, selectedCategories,user]);
 
   return (
     <div className="bg-amber-100 w-screen h-screen relative">
       <div className="filterContainer absolute z-10 bg-white top-4 left-12">
-        {user &&
-          <div className=''>
+        {user && (
+          <div className="">
             <FilterOption handleCategoryChange={handleCategoryChange} />
             <SearchWidget view={viewMap} onSelectPlace={handleSelectHomePlace}></SearchWidget>
           </div>
-          
-        }
+        )}
       </div>
       <div className="viewMap bg-amber-100" ref={mapRef}></div>
     </div>

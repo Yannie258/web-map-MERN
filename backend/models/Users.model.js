@@ -23,7 +23,8 @@ const UserSchema = new Schema({
     },
     favourite: {
         category: { type: String, required: true }, // Category name
-        location: { type: Schema.Types.ObjectId, ref: 'Categories' } // Reference to location in Categories collection
+        favouriteLongitude: { type: String, required: true },//|
+        favouriteLatitude: { type: String, required: true }
     }
   
 })

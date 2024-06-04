@@ -149,8 +149,8 @@ function Map() {
             // @ts-ignore
             type: 'picture-marker',
             url: 'src/assets/favourite.svg', // Replace with your home icon URL
-            width: '24px',
-            height: '24px'
+            width: '30px',
+            height: '30px'
           },
 
           popupTemplate: {
@@ -181,8 +181,8 @@ function Map() {
             // @ts-ignore
             type: 'picture-marker',
             url: 'src/assets/home.svg', // Replace with your home icon URL
-            width: '24px',
-            height: '24px'
+            width: '30px',
+            height: '30px'
           },
           
           popupTemplate: {

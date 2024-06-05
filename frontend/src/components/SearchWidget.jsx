@@ -24,7 +24,8 @@ function SearchWidget({ view, onSelectPlace }) {
       const name = result.name; // Adjust based on your data structure
 
       const content = document.createElement('div');
-      content.innerHTML = `
+      if (user) {
+        content.innerHTML = `
         <div>
           <h2>${name}</h2>
         
@@ -32,34 +33,35 @@ function SearchWidget({ view, onSelectPlace }) {
         </div>
       `;
 
-      // Attach click event listener to the button after the popup is opened
-      content.querySelector('#add-button').addEventListener('click', async () => {
-        console.log('Button clicked');
-        try {
-          // console.log('user', user)
-          if (user) {
-            const response = await axios.put(`/users/account/edit/${user._id}`, {
-              homeAddress: {
-                address: result.feature.attributes.StAddr + result.feature.attributes.City,
-                // @ts-ignore
-                homeLongitude: result.feature.geometry.longitude,
-                // @ts-ignore
-                homeLatitude: result.feature.geometry.latitude
-              }
-            });
-            // console.log(response.data);
-            alert('add home successfully');
-            window.location.href = '/';
+        // Attach click event listener to the button after the popup is opened
+        content.querySelector('#add-button').addEventListener('click', async () => {
+          console.log('Button clicked');
+          try {
+            // console.log('user', user)
+            if (user) {
+              const response = await axios.put(`/users/account/edit/${user._id}`, {
+                homeAddress: {
+                  address: result.feature.attributes.StAddr + result.feature.attributes.City,
+                  // @ts-ignore
+                  homeLongitude: result.feature.geometry.longitude,
+                  // @ts-ignore
+                  homeLatitude: result.feature.geometry.latitude
+                }
+              });
+              // console.log(response.data);
+              alert('add home successfully');
+              window.location.href = '/';
+            }
+          } catch (error) {
+            console.error('Error updating user address:', error);
           }
-        } catch (error) {
-          console.error('Error updating user address:', error);
-        }
-        //it does not work with normal button onclick event
-        // therefore we have to cahnge to this approach
-        // TODO: get address and coordinators and send request to update user infor
-        //same with favourite feature
-        //design css
-      });
+          //it does not work with normal button onclick event
+          // therefore we have to change to this approach
+          // TODO: get address and coordinators and send request to update user infor
+          //same with favourite feature
+          //design css
+        });
+      }   
 
       view.popup.open({
         title: `${result.name}`,

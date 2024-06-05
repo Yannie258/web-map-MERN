@@ -82,7 +82,7 @@ function Map() {
   };
 
   useEffect(() => {
-    if (!mapRef?.current || !categories || categories.length === 0 || !user) return;
+    if (!mapRef?.current) return;
 
     const map = new ArcGisMap({
       basemap: 'streets-navigation-vector'
@@ -99,6 +99,7 @@ function Map() {
     });
     setViewMap(view);
     console.log('test', user);
+    if (!user) return;
 
     const addGraphics = () => {
       view.graphics.removeAll();
@@ -166,11 +167,10 @@ function Map() {
           }
         });
         view.graphics.add(favouriteGraphic);
-       
-      };
+      }
 
       if (user && user.homeAddress) {
-        console.log(user);
+        console.log('user',user);
         const homePoint = new Point({
           longitude: user.homeAddress.homeLongitude,
           latitude: user.homeAddress.homeLatitude
@@ -184,7 +184,7 @@ function Map() {
             width: '30px',
             height: '30px'
           },
-          
+
           popupTemplate: {
             title: 'Home Address',
             content: `
@@ -207,8 +207,8 @@ function Map() {
         //     }
         //   });
         // }
-      };
-    }
+      }
+    };
 
     addGraphics();
 
@@ -218,12 +218,8 @@ function Map() {
   return (
     <div className="bg-amber-100 w-screen h-screen relative">
       <div className="filterContainer absolute z-10 bg-white top-4 left-12">
-        {user && (
-          <div className="">
-            <FilterOption handleCategoryChange={handleCategoryChange} />
-            <SearchWidget view={viewMap} onSelectPlace={handleSelectHomePlace}></SearchWidget>
-          </div>
-        )}
+        {user && <FilterOption handleCategoryChange={handleCategoryChange} />}
+        <SearchWidget view={viewMap} onSelectPlace={handleSelectHomePlace}></SearchWidget>
       </div>
       <div className="viewMap bg-amber-100" ref={mapRef}></div>
     </div>

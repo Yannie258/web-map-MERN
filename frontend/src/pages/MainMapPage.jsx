@@ -53,7 +53,9 @@ function Map() {
       <li><b>Latitude:</b> ${category.geometry.coordinates[1]}</li>
 
     </ul>
+
     <button id='add-button'>Add favourite</button>
+    <a id='more-info' href='#'>More Information</a>
   `;
     // Add event listener for the button
     const addButton = popupContent.querySelector('#add-button');
@@ -75,6 +77,15 @@ function Map() {
         window.location.href = '/';
       } catch (error) {
         console.error(error);
+      }
+    });
+
+    const getMoreInfos = popupContent.querySelector('#more-info');
+    getMoreInfos.addEventListener('click', async () => {
+      try {
+        const res = await axios.get('')
+      } catch (error) {
+        console.log(error)
       }
     });
 

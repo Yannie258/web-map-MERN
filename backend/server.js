@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const Users = require('./routes/user.routes');
 const Categories = require('./routes/map.routes');
+const ThirdWebService = require('./routes/webservice_extern.routes');
 const mongoose = require('mongoose')
 const PORT = process.env.PORT || 8000
 const cookieParser = require('cookie-parser')
@@ -64,6 +65,7 @@ app.use(
 // get object from schema
 app.use('/api/webmap/v1', Users)
 app.use('/api/webmap/v1', Categories);
+app.use('/api/webmap/v1', ThirdWebService);
 
 // define routes and middleware
 app.listen(PORT, () => {

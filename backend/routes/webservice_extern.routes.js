@@ -9,7 +9,8 @@ router.post('/location-info-more', async (req, res) => {
             params: {
                 format: 'json', // Specify the response format
                 lat: lat,
-                lon: lon
+                lon: lon,
+                extratags:1
             }
         });
 
@@ -26,8 +27,6 @@ router.post('/location-info-more', async (req, res) => {
         res.status(500).json({ message: 'Internal server error when getting service data', error: error.message });
     }
 });
-
-
 
 // All routes export
 module.exports = router

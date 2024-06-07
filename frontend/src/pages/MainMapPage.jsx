@@ -55,7 +55,10 @@ function Map() {
     </ul>
 
     <button id='add-button'>Add favourite</button>
-    <a id='more-info' href='#'>More Information</a>
+    <button id='more-info'>More about this place</button>
+    <div id="additional-info">
+      
+    </div>
   `;
     // Add event listener for the button
     const addButton = popupContent.querySelector('#add-button');
@@ -81,11 +84,34 @@ function Map() {
     });
 
     const getMoreInfos = popupContent.querySelector('#more-info');
+    //Send request to Nominatim API
     getMoreInfos.addEventListener('click', async () => {
       try {
-        const res = await axios.get('')
+        console.log('cord', category.geometry.coordinates[0], category.geometry.coordinates[1]);
+        const res = await axios.post('/location-info-more', {
+          lat: category.geometry.coordinates[1],
+          lon: category.geometry.coordinates[0]
+        });
+        console.log('nominatim', res.data.extratags);
+
+        // Dynamically update the additional info section
+        const additionalInfo = popupContent.querySelector('#additional-info');
+        if (res.data.extratags) {
+          additionalInfo.innerHTML = `
+        <h3 id="more_header">Additional Information</h3>
+        <ul>
+          <li><b>Type:</b> ${res.data.type}</li>
+          <li><b>Display Name:</b> ${res.data.display_name}</li>
+          <li><b>Email:</b> ${res.data.extratags.email}</li>
+          <li><b>Tel:</b> ${res.data.extratags.phone}</li>      
+          <li><b>Lincence:</b> ${res.data.licence}</li> 
+        </ul>     
+      `;
+        } else {
+          additionalInfo.innerHTML = '<p>No additional data available.</p>';
+        }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     });
 
@@ -93,7 +119,7 @@ function Map() {
   };
 
   useEffect(() => {
-    if (!mapRef?.current) return;
+    if (!mapRef?.current || !categories) return;
 
     const map = new ArcGisMap({
       basemap: 'streets-navigation-vector'
@@ -168,8 +194,7 @@ function Map() {
           popupTemplate: {
             title: 'Favourite Address',
             content: `
-              <ul>
-            
+              <ul>          
                 <li><b>Longitude:</b> ${user.favourite.favouriteLongitude}</li>
                 <li><b>Latitude:</b> ${user.favourite.favouriteLatitude}</li>
               </ul>
@@ -181,7 +206,7 @@ function Map() {
       }
 
       if (user && user.homeAddress) {
-        console.log('user',user);
+        console.log('user', user);
         const homePoint = new Point({
           longitude: user.homeAddress.homeLongitude,
           latitude: user.homeAddress.homeLatitude

@@ -29,7 +29,7 @@ export function UserContextProvider({ children }) {
       axios
         .get('/categories/all')
         .then(response => {
-          console.log('data', response);
+          // console.log('data', response);
           // Assuming response.data is an array of places with longitude data
           setCategories(response.data);
           setCategoriesColor(colorMap);
@@ -37,9 +37,12 @@ export function UserContextProvider({ children }) {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-      console.log('object', categories);
+      // console.log('object', categories);
     }
-     
   }, [user, categories]);
-  return <UserContext.Provider value={{ user, setUser, isLoading, categories, categoriesColor }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, setUser, isLoading, categories, categoriesColor }}>
+      {children}
+    </UserContext.Provider>
+  );
 }

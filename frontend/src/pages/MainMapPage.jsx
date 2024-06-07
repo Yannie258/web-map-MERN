@@ -1,13 +1,14 @@
 import Graphic from '@arcgis/core/Graphic.js';
 import ArcGisMap from '@arcgis/core/Map.js';
+import esriConfig from '@arcgis/core/config.js';
 import Point from '@arcgis/core/geometry/Point.js';
 import MapView from '@arcgis/core/views/MapView.js';
-import axios from 'axios';
 import { useContext, useEffect, useRef, useState } from 'react';
 import FilterOption from '../components/FilterOption';
+import RoutingAndDirectionWidget from '../components/RoutingAndDirectionWidget';
 import SearchWidget from '../components/SearchWidget';
+import { createPopupContent } from '../helpers/PopUpConfig';
 import { UserContext } from '../helpers/UserContext';
-import { createPopupContent } from '../helpers/PopUpConfig'; 
 
 function Map() {
   const mapRef = useRef(null);
@@ -16,6 +17,9 @@ function Map() {
   const [viewMap, setViewMap] = useState(null);
   const [selectedHomeAddress, setSelectedHomeAddress] = useState(false);
 
+  // @ts-ignore
+  esriConfig.apiKey = import.meta.env.VITE_ARCGIS_KEY;
+  const apiKey = esriConfig.apiKey;
   const getSymbolColorForCategory = categoryName => {
     return categoriesColor[categoryName] || '#000000';
   };
@@ -38,13 +42,13 @@ function Map() {
     }));
   };
 
+  const map = new ArcGisMap({
+    basemap: 'arcgis/navigation'
+  });
+
   useEffect(() => {
     if (!mapRef?.current || !categories) return;
-
-    const map = new ArcGisMap({
-      basemap: 'streets-navigation-vector'
-    });
-
+    // @ts-ignore
     const view = new MapView({
       map: map, // References a Map instance
       container: mapRef.current, // References the ID of a DOM element
@@ -55,7 +59,7 @@ function Map() {
       }
     });
     setViewMap(view);
-    console.log('test', user);
+    // console.log('test', user);
     if (!user) return;
 
     const addGraphics = () => {
@@ -81,12 +85,9 @@ function Map() {
             popupTemplate: {
               title: category.name, //category name
               // @ts-ignore
-              content: createPopupContent(category,user) // pass user context
+              content: createPopupContent(category, user) // pass user context
             }
           });
-          // more info to annothrt providers:
-          //https://nominatim.openstreetmap.org/reverse?format=json&lat=40.714224&lon=-73.961452
-          //https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
 
           if (selectedCategories.length === 0 || selectedCategories.includes(category.name)) {
             view.graphics.add(pointGraphic);
@@ -177,6 +178,7 @@ function Map() {
         {user && <FilterOption handleCategoryChange={handleCategoryChange} />}
         <SearchWidget view={viewMap} onSelectPlace={handleSelectHomePlace}></SearchWidget>
       </div>
+      <RoutingAndDirectionWidget view={viewMap} map={map} apiKey={apiKey}></RoutingAndDirectionWidget>
       <div className="viewMap bg-amber-100" ref={mapRef}></div>
     </div>
   );

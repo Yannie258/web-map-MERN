@@ -3,6 +3,7 @@ import ArcGisMap from '@arcgis/core/Map.js';
 import esriConfig from '@arcgis/core/config.js';
 import Point from '@arcgis/core/geometry/Point.js';
 import MapView from '@arcgis/core/views/MapView.js';
+import Tooltip from '@material-tailwind/react/components/Tooltip';
 import { useContext, useEffect, useRef, useState } from 'react';
 import FilterOption from '../components/FilterOption';
 import RoutingAndDirectionWidget from '../components/RoutingAndDirectionWidget';
@@ -16,6 +17,8 @@ function Map() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [viewMap, setViewMap] = useState(null);
   const [selectedHomeAddress, setSelectedHomeAddress] = useState(false);
+  const [forwardDirection, setForwardDirection] = useState(false);
+  const [openRoute, setOpenRoute] = useState(false);
 
   // @ts-ignore
   esriConfig.apiKey = import.meta.env.VITE_ARCGIS_KEY;
@@ -33,6 +36,12 @@ function Map() {
     event.preventDefault();
     const selectedPlace = event.target.value;
     console.log('click search', selectedPlace);
+  };
+
+  const handleSideBarButton = e => {
+    e.preventDefault();
+    console.log('open', forwardDirection);
+    setForwardDirection(!forwardDirection);
   };
 
   const removeHomeAddress = () => {
@@ -175,10 +184,43 @@ function Map() {
   return (
     <div className="bg-amber-100 w-screen h-screen relative">
       <div className="filterContainer absolute z-10 bg-white top-4 left-12">
-        {user && <FilterOption handleCategoryChange={handleCategoryChange} />}
+        {user && (
+          <div className="relative">
+            <FilterOption handleCategoryChange={handleCategoryChange} />
+            <div className="fixed top-48 left-4 z-20 bg-white rounded">
+              <Tooltip content={!openRoute ? 'show route' : 'hide route'}>
+                <button onClick={e => setOpenRoute(!openRoute)}>
+                  <img
+                    className="w-8 h-6"
+                    src={openRoute ? 'src/assets/sidebar-left.svg' : 'src/assets/sidebar-right.svg'}
+                    alt=""
+                  />
+                </button>
+              </Tooltip>
+            </div>
+
+            {user.homeAddress && user.favourite && openRoute && (
+              <div>
+                <div className="fixed top-1/2 right-2 z-20 bg-white rounded">
+                  <Tooltip content={forwardDirection ? 'Route to favourite' : 'Route back home'}>
+                    <button className="top-4 z-20 rounded" onClick={handleSideBarButton}>
+                      <img className="w-8 h-8" src="src/assets/switch.svg" alt="collapse_side_bar" />
+                    </button>
+                  </Tooltip>
+                </div>
+
+                <RoutingAndDirectionWidget
+                  view={viewMap}
+                  map={map}
+                  apiKey={apiKey}
+                  forwardDirection={forwardDirection}
+                />
+              </div>
+            )}
+          </div>
+        )}
         <SearchWidget view={viewMap} onSelectPlace={handleSelectHomePlace}></SearchWidget>
       </div>
-      <RoutingAndDirectionWidget view={viewMap} map={map} apiKey={apiKey}></RoutingAndDirectionWidget>
       <div className="viewMap bg-amber-100" ref={mapRef}></div>
     </div>
   );

@@ -5,29 +5,27 @@ import RouteParameters from '@arcgis/core/rest/support/RouteParameters.js';
 import { useContext, useEffect } from 'react';
 import { UserContext } from '../helpers/UserContext';
 
-function RoutingAndDirectionWidget({ view, apiKey, map }) {
+function RoutingAndDirectionWidget({ view, apiKey, map, forwardDirection }) {
   // @ts-ignore
   // point the URL to a valid routing service
   const routeUrl = 'https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World';
   const { user } = useContext(UserContext);
   useEffect(() => {
-    if (!view || !view.ui) return;
+    if (!view || !view.ui || !user) return;
+    const { homeAddress, favourite } = user;
+    //if (!homeAddress || !favourite) return;
 
-    let originPoint = null;
-    let destinationPoint = null;
+    const originPoint = {
+      type: 'point',
+      longitude: forwardDirection ? favourite.favouriteLongitude : homeAddress.homeLongitude,
+      latitude: forwardDirection ? favourite.favouriteLatitude : homeAddress.homeLatitude
+    };
 
-    // get an origin and destination
-    view.on('click', event => {
-      if (view.graphics.length === 0) {
-        addGraphic('origin', event.mapPoint);
-      } else if (view.graphics.length === 1) {
-        addGraphic('destination', event.mapPoint);
-        getRoute();
-      } else {
-        view.graphics.removeAll();
-        addGraphic('origin', event.mapPoint);
-      }
-    });
+    const destinationPoint = {
+      type: 'point',
+      longitude: forwardDirection ? homeAddress.homeLongitude : favourite.favouriteLongitude,
+      latitude: forwardDirection ? homeAddress.homeLatitude : favourite.favouriteLatitude
+    };
 
     function addGraphic(type, point) {
       const graphic = new Graphic({
@@ -41,23 +39,30 @@ function RoutingAndDirectionWidget({ view, apiKey, map }) {
       view.graphics.add(graphic);
     }
 
-    function getRoute(origin, destination) {
+    function getRoute() {
       const routeParams = new RouteParameters({
         stops: new FeatureSet({
-          features: view.graphics.toArray()
+          features: [new Graphic({ geometry: originPoint }), new Graphic({ geometry: destinationPoint })]
         }),
         returnDirections: true
       });
-
       route
         .solve(routeUrl, routeParams)
         .then(function (data) {
+          // Clear previous route graphics
+          view.graphics.forEach(graphic => {
+            if (graphic.attributes && graphic.attributes.route) {
+              view.graphics.remove(graphic);
+            }
+          });
+
           data.routeResults.forEach(function (result) {
             result.route.symbol = {
               type: 'simple-line',
-              color: [5, 150, 255],
+              color: forwardDirection ? 'blue' : 'red',
               width: 3
             };
+            result.route.attributes = { route: true }; // Tag the route graphic
             view.graphics.add(result.route);
           });
 
@@ -84,15 +89,20 @@ function RoutingAndDirectionWidget({ view, apiKey, map }) {
               accumulatedDistance += distanceInMeters;
               accumulatedTime += parseFloat(timeInMinutes);
 
-              direction.innerHTML =
-                i +
-                '. ' +
-                result.attributes.text +
-                ' (' +
-                distanceInMeters +
-                ' m in ' +
-                timeInMinutes +
-                ' min driving truck)';
+              let text;
+              if (i === 0) {
+                text = `Start at ${
+                  forwardDirection ? 'favourite' : 'home'
+                } (${distanceInMeters} m in ${timeInMinutes} min driving truck)`;
+              } else if (i === features.length - 1) {
+                text = `End at ${
+                  forwardDirection ? 'home' : 'favourite'
+                } (${distanceInMeters} m in ${timeInMinutes} min driving truck)`;
+              } else {
+                text = `${i}. ${result.attributes.text} (${distanceInMeters} m in ${timeInMinutes} min driving truck)`;
+              }
+
+              direction.innerHTML = text;
               directions.appendChild(direction);
             });
 
@@ -110,8 +120,33 @@ function RoutingAndDirectionWidget({ view, apiKey, map }) {
         });
     }
 
+    // Clear previous route graphics
+    view.graphics.forEach(graphic => {
+      if (graphic.attributes && graphic.attributes.route) {
+        view.graphics.remove(graphic);
+      }
+    });
+
+    // Add graphics to the map
+    addGraphic('origin', originPoint);
+    addGraphic('destination', destinationPoint);
+
+    // Get the route
+    getRoute();
+
+    // Clean up effect
+    return () => {
+      // Clear only route graphics and UI elements
+      view.graphics.forEach(graphic => {
+        if (graphic.attributes && graphic.attributes.route) {
+          view.graphics.remove(graphic);
+        }
+      });
+      view.ui.empty('top-right');
+    };
+
     // Rest of the code...
-  }, [view, apiKey]);
+  }, [view, apiKey, forwardDirection]);
 
   return null; // Widget doesn't render anything directly
 }

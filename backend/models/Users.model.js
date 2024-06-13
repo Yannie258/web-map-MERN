@@ -17,14 +17,14 @@ const UserSchema = new Schema({
         required: true
     },
     homeAddress: {
-        address: { type: String, required: true },
-        homeLongitude: { type: String, required: true },//|
-        homeLatitude: { type: String, required: true },//----
+        address: { type: String},
+        homeLongitude: { type: Number },
+        homeLatitude: { type: Number },
     },
     favourite: {
-        category: { type: String, required: true }, // Category name
-        favouriteLongitude: { type: String, required: true },//|
-        favouriteLatitude: { type: String, required: true }
+        category: { type: String }, 
+        favouriteLongitude: { type: Number },
+        favouriteLatitude: { type: Number }
     }
   
 })

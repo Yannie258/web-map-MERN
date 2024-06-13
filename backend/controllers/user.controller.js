@@ -48,7 +48,7 @@ exports.userLogin = async (req, res) => {
             email: user.email,
             id: user._id,
             userName: user.userName
-        }, privateKey, { expiresIn: '1h' });
+        }, privateKey, { expiresIn: '1h' }); // this session cookies expires in 1h, after 1h user is automatically logout and has to refresh the page by logging again
 
         // Set cookie
         res.cookie('token', token).json(user);

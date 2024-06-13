@@ -57,7 +57,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: mongoDbUrl }),
-    cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day
+    cookie: { maxAge: 1000 * 60 * 60 * 24 } // this cookie can be safe max. 1 day on browser
   })
 );
 

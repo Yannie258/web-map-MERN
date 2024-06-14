@@ -39,7 +39,7 @@ function SearchWidget({ view, onSelectPlace }) {
           try {
             // console.log('user', user)
             if (user) {
-              const response = await axios.put(`/users/account/edit/${user._id}`, {
+              const response = await axios.put(`/users/${user._id}`, {
                 homeAddress: {
                   address: result.feature.attributes.StAddr + result.feature.attributes.City,
                   // @ts-ignore

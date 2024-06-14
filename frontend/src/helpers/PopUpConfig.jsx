@@ -26,7 +26,7 @@ export const createPopupContent = (category, user) => {
   addButton.addEventListener('click', async () => {
     console.log('add favorite clicked', category);
     try {
-      const res = await axios.put(`/users/account/edit/${user._id}`, {
+      const res = await axios.put(`/users/${user._id}`, {
         favourite: {
           category: category.name,
           favouriteLongitude: category.geometry.coordinates[0],

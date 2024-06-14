@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Route, Routes } from '../node_modules/react-router-dom/dist/index';
+import { Route, Routes , Navigate} from 'react-router-dom';
 import './App.css';
 import { UserContextProvider } from './helpers/UserContext';
 import AccountPage from './pages/AccountPage';
@@ -11,6 +11,21 @@ import TermAndConditionsPage from './pages/TermAndConditionsPage';
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000/api/webmap/v1'; //backend url
 axios.defaults.withCredentials = true;
+
+// Set up an interceptor to handle token expiration
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      if (error.response.data.message === 'Token expired, please log in again') {
+        alert("You must be logged in again");
+        // Redirect to the login page
+       return <Navigate to= {'/users/login'} />;
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 function App() {
   return (

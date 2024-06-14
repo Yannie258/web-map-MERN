@@ -21,7 +21,7 @@ function LoginPage() {
       alert('Login successful');
       setRedirectToMainPage(true);
     } catch (error) {
-      alert('Login failed, please try again');
+      alert('Login failed! Your email or password was wrong. Please try again!');
     }
     
   };

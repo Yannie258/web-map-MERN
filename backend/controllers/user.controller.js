@@ -61,12 +61,24 @@ exports.userLogin = async (req, res) => {
 exports.getUserProfile = async (req, res) => { 
     const { token } = req.cookies;
     if (token) {
-        //decrypt the token
-        await jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async(err, data) => { 
-            if (err) throw err;
-            const { userName, email, _id, homeAddress, favourite } = await User.findById(data.id);
-            res.json({ userName, email, _id, homeAddress , favourite});
-        })
+        try {
+             //decrypt the token
+            await jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async (err, data) => {
+                if (err) throw err;
+                const { userName, email, _id, homeAddress, favourite } = await User.findById(data.id);
+                res.json({ userName, email, _id, homeAddress, favourite });
+            });
+        } catch (err) {
+            // Handle token errors
+            if (err.name === 'TokenExpiredError') {
+                // Handle token expiration
+                res.status(401).json({ message: 'Token expired, please log in again' });
+            } else {
+                // Handle other token errors
+                res.status(400).json({ message: 'Invalid token' });
+            }
+        }
+       
 
     } else {
         res.json(null);

@@ -35,7 +35,6 @@ function Map() {
   const handleSelectHomePlace = event => {
     event.preventDefault();
     const selectedPlace = event.target.value;
-    console.log('click search', selectedPlace);
   };
 
   const handleSideBarButton = e => {
@@ -72,25 +71,36 @@ function Map() {
     if (!user) return;
 
     const addGraphics = () => {
+      if (!viewMap || !categories) {
+        return;
+      }
       view.graphics.removeAll();
+      let pointGraphic;
       categories.forEach(category => {
-        if (category.geometry && category.geometry.coordinates) {
-          const point = new Point({
-            longitude: category.geometry.coordinates[0],
-            latitude: category.geometry.coordinates[1]
-          });
+        if (category.geometry && category.geometry.coordinates && category.geometry.coordinates.length >= 2) {
+          const [longitude, latitude] = category.geometry.coordinates;
 
-          const pointGraphic = new Graphic({
+          const point = {
+            type: 'point',
+            x: longitude,
+            y: latitude,
+            spatialReference: {
+              wkid: 4326
+            }
+          };
+          // console.log('checkpoint', point);
+          const markerSymbol = {
+            type: 'simple-marker',
+            color: getSymbolColorForCategory(category.name),
+            outline: {
+              color: [255, 255, 255],
+              width: 2
+            }
+          };
+
+          pointGraphic = new Graphic({
             geometry: user ? point : null,
-            symbol: {
-              // @ts-ignore
-              type: 'simple-marker',
-              color: getSymbolColorForCategory(category.name),
-              outline: {
-                color: [255, 255, 255],
-                width: 1
-              }
-            },
+            symbol: markerSymbol,
             popupTemplate: {
               title: category.name, //category name
               // @ts-ignore
@@ -103,13 +113,17 @@ function Map() {
           }
         }
       });
+      // Log the number of graphics added
 
       // Add a graphic for the home address from user context
-      if (user && user.favourite) {
-        console.log(user);
+      //when favourite is vailable, display symbol favourite
+      if (user.favourite) {
         const favouritePoint = new Point({
-          longitude: user.favourite.favouriteLongitude,
-          latitude: user.favourite.favouriteLatitude
+          x: user.favourite.favouriteLongitude,
+          y: user.favourite.favouriteLatitude,
+          spatialReference: {
+            wkid: 4326
+          }
         });
         const favouriteGraphic = new Graphic({
           geometry: favouritePoint,
@@ -132,14 +146,16 @@ function Map() {
             `
           }
         });
-        view.graphics.add(favouriteGraphic);
+        view.graphics.addMany([favouriteGraphic, pointGraphic]);
       }
 
-      if (user && user.homeAddress) {
-        console.log('user', user);
+      if (user.homeAddress) {
         const homePoint = new Point({
-          longitude: user.homeAddress.homeLongitude,
-          latitude: user.homeAddress.homeLatitude
+          x: user.homeAddress.homeLongitude,
+          y: user.homeAddress.homeLatitude,
+          spatialReference: {
+            wkid: 4326
+          }
         });
         const homeGraphic = new Graphic({
           geometry: homePoint,

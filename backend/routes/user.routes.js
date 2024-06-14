@@ -12,12 +12,10 @@ router.post('/users/logout',userController.userLogOut);
 
 router.get('/users/test', userController.getAllUser);
 router.get('/users/check-user-exists/:field/:value', userController.getUser);
-router.get('/users/profile', userController.getUserProfile);
-router.put('/users/account/edit/:id', userController.editUserAccount);
-router.delete('/users/account/delete/:id',userController.deleteUser);
-
-// router.put('/users/account/edit/home/:id', userController.updateHomeAdressForUser);
-// router.put('/users/account/edit/favourite/:id', userController.updateFavouriteForUser);
+router.get('/users/profile', userController.getUserProfile); // get actual user profile, authenticate user base on token
+router.get('/users/:id', userController.getUserById);
+router.put('/users/:id', userController.editUserAccount);
+router.delete('/users/:id',userController.deleteUser);
 
 // All routes export
 module.exports = router

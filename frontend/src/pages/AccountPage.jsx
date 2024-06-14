@@ -9,7 +9,7 @@ import { Button, Card, CardBody, CardFooter, Input, Typography } from '@material
 
 function AccountPage() {
   // @ts-ignore
-  const { isLoading, user, setUser } = useContext(UserContext);
+  const { isLoading, user, setUser, userDeleted, setUserDeleted } = useContext(UserContext);
   const [isEditingUserName, setIsEditingUserName] = useState(false);
   const [isEditingUserEmail, setIsEditingUserEmail] = useState(false);
   const [userName, setUserName] = useState(user?.userName);
@@ -42,7 +42,7 @@ function AccountPage() {
   const handleSubmitAccountChange = async e => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`/users/account/edit/${user._id}`, {
+      const { data } = await axios.put(`/users/profile`, {
         email: userEmail,
         userName: userName
       });
@@ -55,25 +55,26 @@ function AccountPage() {
     }
   };
 
-  const handleDeleteUserAccount = async (e) => { 
+  const handleDeleteUserAccount = async e => {
+    e.preventDefault();
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      e.preventDefault();
       try {
-        await axios.delete(`/users/account/delete/${user._id}`);   
+        await axios.delete(`/users/${user._id}`);
         setUser(null);
         alert('Delete successful');
         setRedirectToMainPage(true);
+        setUserDeleted(true);
       } catch (error) {
         alert('Delete failed, please try again');
       }
     }
-  }
+  };
 
   if (redirectToMainPage) {
-    console.log('navigate')
+    console.log('navigate');
     return <Navigate to={'/'} />;
   }
- 
+
   return (
     <div>
       <form onSubmit={handleSubmitAccountChange}>

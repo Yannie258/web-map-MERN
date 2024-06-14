@@ -21,8 +21,8 @@ function App() {
           <Route index element={<MainMap />}></Route>
           <Route path="/users/login" element={<LoginPage />}></Route>
           <Route path="/users/register" element={<RegisterPage />}></Route>
-          <Route path="/users/term-and-conditions" element={<TermAndConditionsPage />}></Route>
-          <Route path="/users/account" element={<AccountPage />}></Route>
+          <Route path="/term-and-conditions" element={<TermAndConditionsPage />}></Route>
+          <Route path="/users/:id" element={<AccountPage />}></Route>
         </Route>
       </Routes>
     </UserContextProvider>

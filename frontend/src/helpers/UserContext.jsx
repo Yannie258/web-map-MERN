@@ -8,15 +8,23 @@ export function UserContextProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState(null);
   const [categoriesColor, setCategoriesColor] = useState(null);
+  const [userDeleted, setUserDeleted] = useState(false); // State to track user deletion
 
   // console.log('context', user);
   //userEffect doesn't support async/await
   //This ensures that the profile data is only fetched if the user information is not already available.
   useEffect(() => {
-    if (!user) {
+    if (!user && !userDeleted) {
       axios.get('/users/profile').then(({ data }) => {
         setUser(data);
         setIsLoading(true);
+        setUserDeleted(false);
+      })
+    } else {
+      axios.get('/users/:id').then(({ data }) => {
+        setUser(data);
+        setIsLoading(true);
+        // setUserDeleted(true);
       });
     }
     if (!categories) {
@@ -41,7 +49,7 @@ export function UserContextProvider({ children }) {
     }
   }, [user, categories]);
   return (
-    <UserContext.Provider value={{ user, setUser, isLoading, categories, categoriesColor }}>
+    <UserContext.Provider value={{ user, setUser, isLoading, categories, categoriesColor, userDeleted, setUserDeleted }}>
       {children}
     </UserContext.Provider>
   );

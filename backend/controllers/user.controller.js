@@ -64,7 +64,7 @@ exports.getUserProfile = async (req, res) => {
         //decrypt the token
         await jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async(err, data) => { 
             if (err) throw err;
-            const {userName, email,_id, homeAddress, favourite} = await User.findById(data.id)
+            const { userName, email, _id, homeAddress, favourite } = await User.findById(data.id);
             res.json({ userName, email, _id, homeAddress , favourite});
         })
 
@@ -109,6 +109,20 @@ exports.getUser = async (req, res) => {
   }
 }
 
+exports.getUserById = async (req, res) => { 
+    const { id } = req.params;
+    try {
+        const user = await User.findById(id);
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        res.status(500).send({ message: 'An internal server error occurred' });
+    }
+}
+
 exports.userLogOut = async (req,res)=>{
      try {
     // Clear the cookie
@@ -123,13 +137,13 @@ exports.deleteUser = async (req, res) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
         if (deletedUser) {
-            res.status(200).json({ message: 'User deleted successfully' });
+            res.status(200).json({ message: 'User account deleted successfully' });
         } else {
             res.status(404).json({ message: 'User not found' });
         }
 
     } catch (error) {
-        res.status(500).send({ message: 'Error logging out' });
+        res.status(500).send({ message: 'An internal server error occurred' });
     }
 }
 

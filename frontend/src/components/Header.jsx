@@ -1,13 +1,13 @@
 // @ts-nocheck
-import { useContext, useEffect, useState } from 'react';
+import { Tooltip } from '@material-tailwind/react';
+import axios from 'axios';
+import { useContext } from 'react';
 import { Link, Navigate } from '../../node_modules/react-router-dom/dist/index';
 import { UserContext } from '../helpers/UserContext';
-import { Tooltip, Button } from '@material-tailwind/react';
-import axios from 'axios';
 
 function Header() {
   const { user, setUser, isLoading, setIsLoading } = useContext(UserContext);
-  
+
   const handleUserSignOut = async () => {
     try {
       // Invalidate session on the server side

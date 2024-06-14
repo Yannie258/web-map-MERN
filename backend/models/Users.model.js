@@ -23,6 +23,7 @@ const UserSchema = new Schema({
     },
     favourite: {
         category: { type: String }, 
+        address: { type: String },
         favouriteLongitude: { type: Number },
         favouriteLatitude: { type: Number }
     }

@@ -41,8 +41,13 @@ function AccountPage() {
 
   const handleSubmitAccountChange = async e => {
     e.preventDefault();
+    // Check if userName and userEmail are unchanged
+    if (userName === user.userName && userEmail === user.email) {
+      alert('No changes made');
+      return;
+    }
     try {
-      const { data } = await axios.put(`/users/profile`, {
+      const { data } = await axios.put(`/users/${user._id}`, {
         email: userEmail,
         userName: userName
       });
@@ -132,6 +137,34 @@ function AccountPage() {
                   ) : (
                     ''
                   )}
+                </div>
+
+                <div className="mt-5 relative flex w-full max-w-[24rem]">
+                  <Input
+                    variant="static"
+                    label="Home"
+                    placeholder="Home Address"
+                    value={user?.homeAddress ? user.homeAddress.address : 'Home Address was not set'}
+
+                  />
+                </div>
+
+                <div className="mt-5 relative flex w-full max-w-[24rem]">
+                  <Input
+                    variant="static"
+                    label="Favourite Category"
+                    placeholder="favourite"
+                    value={user?.favourite ? `${user.favourite.category}` : 'Favourite was not set'}
+                  />
+                </div>
+
+                <div className="mt-5 relative flex w-full max-w-[24rem]">
+                  <Input
+                    variant="static"
+                    label="Favourite Address"
+                    placeholder="Static"
+                    value={user?.favourite ? `${user.favourite.address}` : 'Favourite was not set'}
+                  />
                 </div>
               </div>
             </div>

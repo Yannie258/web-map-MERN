@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Input, Button } from '@material-tailwind/react';
+import { checkUserExists } from '../helpers/utilsMethods';
 
 function RegisterPage() {
   const [userName, setUserName] = useState('');
@@ -32,30 +33,25 @@ function RegisterPage() {
     }
   };
 
-  const handleUserNameChange = e => {
+  const handleUserNameChange = async(e) => {
     const newUserName = e.target.value;
     setUserName(newUserName);
-    checkIfUserExists('userName', newUserName);
+    try {
+      const exists = await checkUserExists('userName', newUserName);
+      setIsUserRegistered(exists);
+    } catch (error) {
+      console.error('Error checking username:', error);
+    }
   };
   
-  const handleUserEmailChange = e => {
+  const handleUserEmailChange = async (e) => {
     const newUserEmail = e.target.value;
     setEmail(newUserEmail);
-    checkIfUserExists('email', newUserEmail);
-  };
-
-  // Function to check if the user already exists in the database
-  const checkIfUserExists = async (field, value) => {
     try {
-      const response = await axios.get(`/users/check-user-exists/${field}/${value}`);
-      if (field === 'userName') {
-        setIsUserRegistered(response.data.exists);
-      } else if (field === 'email') {
-        setIsEmailRegistered(response.data.exists);
-      }
+      const exists = await checkUserExists('email', newUserEmail);
+      setIsEmailRegistered(exists);
     } catch (error) {
-      // Handle error
-      console.error('Error checking user existence:', error);
+      console.error('Error checking email:', error);
     }
   };
 

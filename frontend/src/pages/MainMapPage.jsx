@@ -1,7 +1,6 @@
 import Graphic from '@arcgis/core/Graphic.js';
 import ArcGisMap from '@arcgis/core/Map.js';
 import esriConfig from '@arcgis/core/config.js';
-import Point from '@arcgis/core/geometry/Point.js';
 import MapView from '@arcgis/core/views/MapView.js';
 import Tooltip from '@material-tailwind/react/components/Tooltip';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -39,7 +38,7 @@ function Map() {
 
   const handleSideBarButton = e => {
     e.preventDefault();
-    console.log('open', forwardDirection);
+    // console.log('open', forwardDirection);
     setForwardDirection(!forwardDirection);
   };
 
@@ -79,7 +78,6 @@ function Map() {
       categories.forEach(category => {
         if (category.geometry && category.geometry.coordinates && category.geometry.coordinates.length >= 2) {
           const [longitude, latitude] = category.geometry.coordinates;
-
           const point = {
             type: 'point',
             x: longitude,
@@ -117,14 +115,19 @@ function Map() {
 
       // Add a graphic for the home address from user context
       //when favourite is vailable, display symbol favourite
-      if (user.favourite) {
-        const favouritePoint = new Point({
+      // back end user profile may send an emty object of favourite or home address, if statement can pass, we need to set more condition for Object.keys
+      if (
+        user.favourite
+      ) {
+        console.log('favourite', user.favourite);
+        const favouritePoint = {
+          type: 'point',
           x: user.favourite.favouriteLongitude,
           y: user.favourite.favouriteLatitude,
           spatialReference: {
             wkid: 4326
           }
-        });
+        };
         const favouriteGraphic = new Graphic({
           geometry: favouritePoint,
           symbol: {
@@ -138,7 +141,7 @@ function Map() {
           popupTemplate: {
             title: 'Favourite Address',
             content: `
-              <ul>          
+              <ul>
                 <li><b>Longitude:</b> ${user.favourite.favouriteLongitude}</li>
                 <li><b>Latitude:</b> ${user.favourite.favouriteLatitude}</li>
               </ul>
@@ -147,16 +150,17 @@ function Map() {
           }
         });
         view.graphics.addMany([favouriteGraphic, pointGraphic]);
-      }
+      };
 
       if (user.homeAddress) {
-        const homePoint = new Point({
+        const homePoint = {
+          type:'point',
           x: user.homeAddress.homeLongitude,
           y: user.homeAddress.homeLatitude,
           spatialReference: {
             wkid: 4326
           }
-        });
+        };
         const homeGraphic = new Graphic({
           geometry: homePoint,
           symbol: {

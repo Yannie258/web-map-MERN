@@ -29,6 +29,7 @@ export const createPopupContent = (category, user) => {
       const res = await axios.put(`/users/${user._id}`, {
         favourite: {
           category: category.name,
+          address: `${category.properties.STRASSE} ${category.properties.PLZ} ${category.properties.ORT}`,
           favouriteLongitude: category.geometry.coordinates[0],
           favouriteLatitude: category.geometry.coordinates[1]
         }

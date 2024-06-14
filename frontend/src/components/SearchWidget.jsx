@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { UserContext } from '../helpers/UserContext';
 
 function SearchWidget({ view, onSelectPlace }) {
-  const { user } = useContext(UserContext);
+  const { user , categories} = useContext(UserContext);
 
   useEffect(() => {
     if (!view || !view.ui) return;
@@ -29,7 +29,7 @@ function SearchWidget({ view, onSelectPlace }) {
         <div>
           <h2>${name}</h2>
         
-          <button id="add-button">Add</button>
+          <button id="add-button">Add home</button>
         </div>
       `;
 
@@ -41,7 +41,7 @@ function SearchWidget({ view, onSelectPlace }) {
             if (user) {
               const response = await axios.put(`/users/${user._id}`, {
                 homeAddress: {
-                  address: result.feature.attributes.StAddr + result.feature.attributes.City,
+                  address: result.feature.attributes.StAddr + ' '+ result.feature.attributes.City,
                   // @ts-ignore
                   homeLongitude: result.feature.geometry.longitude,
                   // @ts-ignore

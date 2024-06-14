@@ -189,4 +189,42 @@ exports.updateFavouriteForUser = async (req, res) => {
     }
 }
 
+exports.removeHome = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findByIdAndUpdate(
+        userId,
+        { $unset: { homeAddress: 1 } },
+        { new: true }
+        );
+
+        if (!user) {
+        return res.status(404).send('User not found');
+        }
+
+        res.status(200).json(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
+exports.removeFavourite = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findByIdAndUpdate(
+        userId,
+        { $unset: { favourite: 1 } },
+        { new: true }
+        );
+
+        if (!user) {
+        return res.status(404).send('User not found');
+        }
+
+        res.send(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
 

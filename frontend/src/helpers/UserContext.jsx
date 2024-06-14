@@ -21,13 +21,13 @@ export function UserContextProvider({ children }) {
         setUserDeleted(false);
       })
     }
-    else {
-      axios.get('/users/:id').then(({ data }) => {
-        setUser(data);
-        setIsLoading(true);
-        // setUserDeleted(true);
-      });
-    }
+    // else {
+    //   axios.get('/users/:id').then(({ data }) => {
+    //     setUser(data);
+    //     setIsLoading(true);
+    //     // setUserDeleted(true);
+    //   });
+    // }
     if (!categories) {
       const colorMap = {
         Schulen: '#ff9843',

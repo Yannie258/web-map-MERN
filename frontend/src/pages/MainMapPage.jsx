@@ -8,10 +8,13 @@ import FilterOption from '../components/FilterOption';
 import RoutingAndDirectionWidget from '../components/RoutingAndDirectionWidget';
 import SearchWidget from '../components/SearchWidget';
 import { createPopupContent } from '../helpers/PopUpConfig';
+import { createPopUpHome }  from '../helpers/PopUpHome';
 import { UserContext } from '../helpers/UserContext';
+import { createPopUpFavourite } from '../helpers/PopUpFavourite';
 
 function Map() {
   const mapRef = useRef(null);
+  // @ts-ignore
   const { user, setUser, categories, categoriesColor } = useContext(UserContext);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [viewMap, setViewMap] = useState(null);
@@ -19,6 +22,7 @@ function Map() {
   const [forwardDirection, setForwardDirection] = useState(false);
   const [openRoute, setOpenRoute] = useState(false);
 
+  console.log('main map',user)
   // @ts-ignore
   esriConfig.apiKey = import.meta.env.VITE_ARCGIS_KEY;
   const apiKey = esriConfig.apiKey;
@@ -65,138 +69,120 @@ function Map() {
         top: 40 // Zoom button position
       }
     });
+
     setViewMap(view);
     // console.log('test', user);
-    if (!user) return;
+    view
+      .when(() => {
+        const addGraphics = () => {
+          if (!viewMap || !categories) {
+            return;
+          }
+          view.graphics.removeAll();
+          let pointGraphic;
+          categories.forEach(category => {
+            if (category.geometry && category.geometry.coordinates && category.geometry.coordinates.length >= 2) {
+              const [longitude, latitude] = category.geometry.coordinates;
+              const point = {
+                type: 'point',
+                x: longitude,
+                y: latitude,
+                spatialReference: {
+                  wkid: 4326
+                }
+              };
+              // console.log('checkpoint', point);
+              const markerSymbol = {
+                type: 'simple-marker',
+                color: getSymbolColorForCategory(category.name),
+                outline: {
+                  color: [255, 255, 255],
+                  width: 2
+                }
+              };
 
-    const addGraphics = () => {
-      if (!viewMap || !categories) {
-        return;
-      }
-      view.graphics.removeAll();
-      let pointGraphic;
-      categories.forEach(category => {
-        if (category.geometry && category.geometry.coordinates && category.geometry.coordinates.length >= 2) {
-          const [longitude, latitude] = category.geometry.coordinates;
-          const point = {
-            type: 'point',
-            x: longitude,
-            y: latitude,
-            spatialReference: {
-              wkid: 4326
-            }
-          };
-          // console.log('checkpoint', point);
-          const markerSymbol = {
-            type: 'simple-marker',
-            color: getSymbolColorForCategory(category.name),
-            outline: {
-              color: [255, 255, 255],
-              width: 2
-            }
-          };
+              pointGraphic = new Graphic({
+                geometry: user ? point : null,
+                symbol: markerSymbol,
+                popupTemplate: {
+                  title: category.name, //category name
+                  // @ts-ignore
+                  content: createPopupContent(category, user) // pass user context
+                }
+              });
 
-          pointGraphic = new Graphic({
-            geometry: user ? point : null,
-            symbol: markerSymbol,
-            popupTemplate: {
-              title: category.name, //category name
-              // @ts-ignore
-              content: createPopupContent(category, user) // pass user context
+              if (selectedCategories.length === 0 || selectedCategories.includes(category.name)) {
+                console.log('add');
+                view.graphics.add(pointGraphic);
+              }
             }
           });
+          // Log the number of graphics added
 
-          if (selectedCategories.length === 0 || selectedCategories.includes(category.name)) {
-            view.graphics.add(pointGraphic);
+          // Add a graphic for the home address from user context
+          //when favourite is vailable, display symbol favourite
+          // back end user profile may send an emty object of favourite or home address, if statement can pass, we need to set more condition for Object.keys
+          if (user.favourite.address) {
+            console.log('favourite', user.favourite);
+            const favouritePoint = {
+              type: 'point',
+              x: user.favourite.favouriteLongitude,
+              y: user.favourite.favouriteLatitude,
+              spatialReference: {
+                wkid: 4326
+              }
+            };
+            const favouriteGraphic = new Graphic({
+              geometry: favouritePoint,
+              symbol: {
+                // @ts-ignore
+                type: 'picture-marker',
+                url: 'src/assets/favourite.svg', // Replace with your home icon URL
+                width: '30px',
+                height: '30px'
+              },
+
+              popupTemplate: {
+                title: 'Favourite Address',
+                content: createPopUpFavourite(user)
+              }
+            });
+            view.graphics.addMany([favouriteGraphic, pointGraphic]);
           }
-        }
+
+          if (user.homeAddress.address) {
+            const homePoint = {
+              type: 'point',
+              x: user.homeAddress.homeLongitude,
+              y: user.homeAddress.homeLatitude,
+              spatialReference: {
+                wkid: 4326
+              }
+            };
+            const homeGraphic = new Graphic({
+              geometry: homePoint,
+              symbol: {
+                // @ts-ignore
+                type: 'picture-marker',
+                url: 'src/assets/home.svg', // Replace with your home icon URL
+                width: '30px',
+                height: '30px'
+              },
+
+              popupTemplate: {
+                title: 'Home Address',
+                // @ts-ignore
+                content: createPopUpHome(user)
+              }
+            });
+            view.graphics.add(homeGraphic);
+          }
+        };
+        addGraphics();
+      })
+      .catch(err => {
+        console.error('MapView failed to initialize:', err);
       });
-      // Log the number of graphics added
-
-      // Add a graphic for the home address from user context
-      //when favourite is vailable, display symbol favourite
-      // back end user profile may send an emty object of favourite or home address, if statement can pass, we need to set more condition for Object.keys
-      if (
-        user.favourite
-      ) {
-        console.log('favourite', user.favourite);
-        const favouritePoint = {
-          type: 'point',
-          x: user.favourite.favouriteLongitude,
-          y: user.favourite.favouriteLatitude,
-          spatialReference: {
-            wkid: 4326
-          }
-        };
-        const favouriteGraphic = new Graphic({
-          geometry: favouritePoint,
-          symbol: {
-            // @ts-ignore
-            type: 'picture-marker',
-            url: 'src/assets/favourite.svg', // Replace with your home icon URL
-            width: '30px',
-            height: '30px'
-          },
-
-          popupTemplate: {
-            title: 'Favourite Address',
-            content: `
-              <ul>
-                <li><b>Longitude:</b> ${user.favourite.favouriteLongitude}</li>
-                <li><b>Latitude:</b> ${user.favourite.favouriteLatitude}</li>
-              </ul>
-              <button id='remove-button'>remove</button>
-            `
-          }
-        });
-        view.graphics.addMany([favouriteGraphic, pointGraphic]);
-      };
-
-      if (user.homeAddress) {
-        const homePoint = {
-          type:'point',
-          x: user.homeAddress.homeLongitude,
-          y: user.homeAddress.homeLatitude,
-          spatialReference: {
-            wkid: 4326
-          }
-        };
-        const homeGraphic = new Graphic({
-          geometry: homePoint,
-          symbol: {
-            // @ts-ignore
-            type: 'picture-marker',
-            url: 'src/assets/home.svg', // Replace with your home icon URL
-            width: '30px',
-            height: '30px'
-          },
-
-          popupTemplate: {
-            title: 'Home Address',
-            content: `
-              <ul>
-                <li><b>Address:</b> ${user.homeAddress.address}</li>
-                <li><b>Longitude:</b> ${user.homeAddress.homeLongitude}</li>
-                <li><b>Latitude:</b> ${user.homeAddress.homeLatitude}</li>
-              </ul>
-              <button id='remove-button'>remove</button>
-            `
-          }
-        });
-        view.graphics.add(homeGraphic);
-        //   // Add event listener for the remove button
-        //   view.popup.on('trigger-action', (event) => {
-        //     if (event.action.id === 'remove-home') {
-        //       // Handle removing the home address
-        //       console.log('Remove home address clicked');
-        //       removeHomeAddress();
-        //     }
-        //   });
-        // }
-      }
-    };
-
-    addGraphics();
 
     return () => view && view.destroy();
   }, [mapRef, categories, selectedCategories, user]);
@@ -207,17 +193,19 @@ function Map() {
         {user && (
           <div className="relative">
             <FilterOption handleCategoryChange={handleCategoryChange} />
-            <div className="fixed top-48 left-4 z-20 bg-white rounded">
-              <Tooltip content={!openRoute ? 'show route' : 'hide route'}>
-                <button onClick={e => setOpenRoute(!openRoute)}>
-                  <img
-                    className="w-8 h-6"
-                    src={openRoute ? 'src/assets/sidebar-left.svg' : 'src/assets/sidebar-right.svg'}
-                    alt=""
-                  />
-                </button>
-              </Tooltip>
-            </div>
+            {user.homeAddress.address && user.favourite && (
+              <div className="fixed top-48 left-4 z-20 bg-white rounded">
+                <Tooltip content={!openRoute ? 'show route' : 'hide route'}>
+                  <button onClick={e => setOpenRoute(!openRoute)}>
+                    <img
+                      className="w-8 h-6"
+                      src={openRoute ? 'src/assets/sidebar-left.svg' : 'src/assets/sidebar-right.svg'}
+                      alt=""
+                    />
+                  </button>
+                </Tooltip>
+              </div>
+            )}
 
             {user.homeAddress && user.favourite && openRoute && (
               <div>

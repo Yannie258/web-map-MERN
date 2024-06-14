@@ -15,7 +15,9 @@ router.get('/users/check-user-exists/:field/:value', userController.getUser);
 router.get('/users/profile', userController.getUserProfile); // get actual user profile, authenticate user base on token
 router.get('/users/:id', userController.getUserById);
 router.put('/users/:id', userController.editUserAccount);
-router.delete('/users/:id',userController.deleteUser);
+router.put('/users/:id/removeFavourite', userController.removeFavourite);
+router.put('/users/:id/removeHome', userController.removeHome);
+router.delete('/users/:id', userController.deleteUser);
 
 // All routes export
 module.exports = router

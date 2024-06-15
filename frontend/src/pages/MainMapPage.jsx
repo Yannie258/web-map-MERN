@@ -144,6 +144,7 @@ function Map() {
 
               popupTemplate: {
                 title: 'Favourite Address',
+                // @ts-ignore
                 content: createPopUpFavourite(user)
               }
             });

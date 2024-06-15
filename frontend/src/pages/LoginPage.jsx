@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useContext, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../helpers/UserContext';
 
 function LoginPage() {
@@ -17,17 +17,17 @@ function LoginPage() {
         email,
         password
       });
-      setUser(data );
-      alert('Login successful');
+      setUser(data);
+      // alert('Login successful');
       setRedirectToMainPage(true);
     } catch (error) {
       alert('Login failed! Your email or password was wrong. Please try again!');
     }
-    
   };
 
   if (redirectToMainPage) {
-    return <Navigate to={'/'} />;
+    window.location.href = '/'; // get data from useContext again
+    // return <Navigate to={'/'} />;
   }
 
   return (
@@ -71,7 +71,8 @@ function LoginPage() {
               />
             </div>
 
-            <div className="flex items-center justify-between">
+            {/* Develop later */}
+            {/* <div className="flex items-center justify-between">
               <div className="flex items-start">
                 <div className="flex items-center h-5">
                   <input
@@ -91,11 +92,11 @@ function LoginPage() {
               <a href="#" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">
                 Forgot password?
               </a>
-            </div>
-            
+            </div> */}
+
             <button
               className="w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-              type='submit'
+              type="submit"
             >
               Login
             </button>

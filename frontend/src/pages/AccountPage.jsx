@@ -81,10 +81,10 @@ function AccountPage() {
   }
 
   return (
-    <div>
+    <div className="flex items-center justify-center min-h-screen">
       <form onSubmit={handleSubmitAccountChange}>
-        <Card className="mt-20 w-96">
-          <Typography variant="h5" color="blue-gray" className="mb-2 text-center">
+        <Card className="w-96">
+          <Typography variant="h2" color="blue-gray" className="mb-2 text-center">
             User Account
           </Typography>
 
@@ -144,8 +144,7 @@ function AccountPage() {
                     variant="static"
                     label="Home"
                     placeholder="Home Address"
-                    value={user?.homeAddress ? user.homeAddress.address : 'Home Address was not set'}
-
+                    value={user.homeAddress.address ? user.homeAddress.address : 'Home Address was not set'}
                   />
                 </div>
 
@@ -154,7 +153,7 @@ function AccountPage() {
                     variant="static"
                     label="Favourite Category"
                     placeholder="favourite"
-                    value={user?.favourite ? `${user.favourite.category}` : 'Favourite was not set'}
+                    value={user.favourite.address ? `${user.favourite.category}` : 'Favourite was not set'}
                   />
                 </div>
 
@@ -163,7 +162,7 @@ function AccountPage() {
                     variant="static"
                     label="Favourite Address"
                     placeholder="Static"
-                    value={user?.favourite ? `${user.favourite.address}` : 'Favourite was not set'}
+                    value={user.favourite.address ? `${user.favourite.address}` : 'Favourite was not set'}
                   />
                 </div>
               </div>

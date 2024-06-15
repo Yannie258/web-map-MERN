@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import MainMap from './pages/MainMapPage';
 import RegisterPage from './pages/RegisterPage';
 import TermAndConditionsPage from './pages/TermAndConditionsPage';
+import Documentation from './pages/Documentation';
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000/api/webmap/v1'; //backend url
 axios.defaults.withCredentials = true;
@@ -38,6 +39,8 @@ function App() {
           <Route path="/users/register" element={<RegisterPage />}></Route>
           <Route path="/term-and-conditions" element={<TermAndConditionsPage />}></Route>
           <Route path="/users/:id" element={<AccountPage />}></Route>
+          <Route path="/terms-and-condition" element={<TermAndConditionsPage />}></Route>
+          <Route path="/documentation" element={<Documentation />}></Route>
         </Route>
       </Routes>
     </UserContextProvider>

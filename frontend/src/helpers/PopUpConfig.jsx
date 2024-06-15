@@ -5,13 +5,13 @@ export const createPopupContent = (category, user) => {
   popupContent.innerHTML = `
     <ul>
       <li><b>Category:</b> ${category.name}</li>
-      <li><b>Name:</b> ${category.properties.BEZEICHNUNG}</li>
+      <li><b>Name:</b> ${category.properties.BEZEICHNUNG ? category.properties.BEZEICHNUNG: '-'}</li>
       <li><b>Carry on:</b> ${category.properties.TRAEGER}</li>
       <li><b>Address:</b> ${category.properties.STRASSE}</li>
       <li><span>${category.properties.PLZ} ${category.properties.ORT}</span></li>
-      <li><b>Contact:</b> ${category.properties.TELEFON}</li>
-      <li><b>Web:</b> ${category.properties?.WWW}</li>
-      <li><b>Email:</b> ${category.properties?.EMAIL}</li>
+      <li><b>Contact:</b> ${category.properties.TELEFON ? category.properties.TELEFON : '-'}</li>
+      <li><b>Web:</b> ${category.properties.WWW ? category.properties.WWW : '-'}</li>
+      <li><b>Email:</b> ${category.properties.EMAIL ? category.properties.EMAIL : '-'}</li>
       <li><b>Longitude:</b> ${category.geometry.coordinates[0]}</li>
       <li><b>Latitude:</b> ${category.geometry.coordinates[1]}</li>
     </ul>
@@ -58,9 +58,9 @@ export const createPopupContent = (category, user) => {
           <ul>
             <li><b>Type:</b> ${res.data.type}</li>
             <li><b>Display Name:</b> ${res.data.display_name}</li>
-            <li><b>Email:</b> ${res.data.extratags.email}</li>
-            <li><b>Tel:</b> ${res.data.extratags.phone}</li>      
-            <li><b>Licence:</b> ${res.data.licence}</li> 
+            <li><b>Email:</b> ${res.data.extratags.email ? res.data.extratags.email : '-'}</li>
+            <li><b>Tel:</b> ${res.data.extratags.phone ? res.data.extratags.phone : '-'}</li>      
+            <li><b>Licence:</b> ${res.data.licence ? res.data.licence : '-'}</li> 
           </ul>     
         `;
       } else {

@@ -44,7 +44,7 @@ function Header() {
               <span className="text-sm text-secondary underline">Forever young</span>
             </div>
           </Link>
-          <div className="flex space-x-4 gap-2 justify-center lg:w-[24rem]">
+          <div className="flex space-x-4 gap-2 justify-center lg:w-[24rem] max-w-sm flex-wrap">
             <div className="flex space-x-4">
               <Typography as="li" variant="small" color="blue-gray" className="p-1 font-normal mt-1 hover:underline ">
                 <Link

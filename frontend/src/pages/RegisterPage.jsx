@@ -77,7 +77,7 @@ function RegisterPage() {
   };
 
   if (redirectToMainPage) {
-    return <Navigate to={'/'} />;
+    return <Navigate to={'/users/login'} />;
   }
 
   return (

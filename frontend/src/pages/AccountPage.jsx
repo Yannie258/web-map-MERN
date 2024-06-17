@@ -52,8 +52,9 @@ function AccountPage() {
         userName: userName
       });
       setUser(data);
-      alert('Edit successful');
+      //alert('Edit successful');
       setRedirectToMainPage(true);
+
     } catch (error) {
       console.log('Edit Error: ' + error);
       alert('Edit failed, please try again');
@@ -76,8 +77,7 @@ function AccountPage() {
   };
 
   if (redirectToMainPage) {
-    console.log('navigate');
-    return <Navigate to={'/'} />;
+    window.location.href = '/'; // get data from useContext again
   }
 
   return (

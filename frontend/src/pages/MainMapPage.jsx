@@ -195,7 +195,7 @@ function Map() {
           <div className="relative">
             <FilterOption handleCategoryChange={handleCategoryChange} />
             {user.homeAddress.address && user.favourite && (
-              <div className="fixed top-48 left-4 z-20 bg-white rounded">
+              <div className="fixed top-64 left-4 z-20 bg-white rounded">
                 <Tooltip content={!openRoute ? 'show route' : 'hide route'}>
                   <button onClick={e => setOpenRoute(!openRoute)}>
                     <img

@@ -13,15 +13,65 @@ a img {
     width: 100%;
 }
 
-#add-button{
-    background-color: aquamarine;
-    
+#configPOIPopup {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 2px;
 }
 
-#remove-home-button{
-    background-color: aquamarine;
+#add-home-button,
+#add-favourite-button {
+    width: 100px;
+    width: 150px;
+    height: 50px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    align-items: center;
+    align-content: center;
+    transition: background-color 0.3s ease;
+
 }
 
-#remove-favourite-button{
+#add-home-button:hover, #add-favourite-button:hover {
+    background-color: #ff4c4c;
+}
+
+#more-info {
+    background-color: #7882d8;
+    width: 150px;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    height: 50px;
+}
+
+#more-info:hover {
+    background-color: #5f69b1;
+}
+
+#remove-home-button,
+#remove-favourite-button {
     background-color: aquamarine;
+    width: 20px;
+    height: 20px;
+}
+
+#more_header {
+    color: blue;
+    font-weight: 500;
+    font-size: larger;
 }

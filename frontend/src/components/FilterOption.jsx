@@ -52,7 +52,13 @@ function FilterOption({ handleCategoryChange }) {
 
   return (
     <div className="flex flex-col space-y-2">
-      <Select isMulti options={options} styles={customStyles} onChange={handleChange} />
+      <Select
+        isMulti
+        options={options}
+        styles={customStyles}
+        onChange={handleChange}
+        placeholder="Filter categories..."
+      />
     </div>
   );
 }

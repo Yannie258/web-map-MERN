@@ -1,14 +1,15 @@
+//import '@fortawesome/fontawesome-free/css/all.min.css';
 import axios from 'axios';
-import { Route, Routes , Navigate} from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { UserContextProvider } from './helpers/UserContext';
 import AccountPage from './pages/AccountPage';
+import Documentation from './pages/Documentation';
 import LayoutPage from './pages/LayoutPage';
 import LoginPage from './pages/LoginPage';
 import MainMap from './pages/MainMapPage';
 import RegisterPage from './pages/RegisterPage';
 import TermAndConditionsPage from './pages/TermAndConditionsPage';
-import Documentation from './pages/Documentation';
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000/api/webmap/v1'; //backend url
 axios.defaults.withCredentials = true;
@@ -19,9 +20,9 @@ axios.interceptors.response.use(
   error => {
     if (error.response && error.response.status === 401) {
       if (error.response.data.message === 'Token expired, please log in again') {
-        alert("You must be logged in again");
+        alert('You must be logged in again');
         // Redirect to the login page
-       return <Navigate to= {'/users/login'} />;
+        return <Navigate to={'/users/login'} />;
       }
     }
     return Promise.reject(error);

@@ -20,26 +20,22 @@ function SearchWidget({ view, onSelectPlace }) {
 
     searchWidget.on('select-result', e => {
       const result = e.result;
-      console.log('search', result);
       const name = result.name; // Adjust based on your data structure
 
       const content = document.createElement('div');
       if (user) {
         content.innerHTML = `
         <div>
-          <h2>${name}</h2>
-        
-          <button id="add-button">Add home</button>
+          <h2>${name}</h2>    
+          <button id="add-home-button">Add home</button>
         </div>
       `;
 
         // Attach click event listener to the button after the popup is opened
-        content.querySelector('#add-button').addEventListener('click', async () => {
-          console.log('Button clicked');
+        content.querySelector('#add-home-button').addEventListener('click', async () => {
           try {
-            // console.log('user', user)
             if (user) {
-              const response = await axios.put(`/users/${user._id}`, {
+              await axios.put(`/users/${user._id}`, {
                 homeAddress: {
                   address: result.feature.attributes.StAddr + ' '+ result.feature.attributes.City,
                   // @ts-ignore
@@ -48,12 +44,12 @@ function SearchWidget({ view, onSelectPlace }) {
                   homeLatitude: result.feature.geometry.latitude
                 }
               });
-              // console.log(response.data);
               alert('add home successfully');
               window.location.href = '/';
             }
           } catch (error) {
             console.error('Error updating user address:', error);
+            alert('Error in updating user address!');
           }
           //it does not work with normal button onclick event
           // therefore we have to change to this approach

@@ -1,0 +1,1 @@
+## Please read the README file inside every directory to run the application

@@ -10,7 +10,7 @@ router.post('/users/register', userController.createUser);
 router.post('/users/login', userController.userLogin);
 router.post('/users/logout',userController.userLogOut);
 
-router.get('/users/test', userController.getAllUser);
+router.get('/users/all', userController.getAllUser);
 router.get('/users/check-user-exists/:field/:value', userController.getUser);
 router.get('/users/profile', userController.getUserProfile); // get actual user profile, authenticate user base on token
 router.get('/users/:id', userController.getUserById);

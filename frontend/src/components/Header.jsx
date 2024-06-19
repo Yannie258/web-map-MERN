@@ -33,6 +33,10 @@ function Header() {
     window.location.href = '/';
   };
 
+  const handleDirectToAccount = () => {
+    window.location.href = '/users/account';
+  };
+
   return (
     <div>
       <header className="flex z-20 sm:flex-col bg-nav max-sm:justify-around justify-around flex-row border-2 p-2 border-indigo-200 border-b-indigo-500 shrink-0">
@@ -73,7 +77,7 @@ function Header() {
             <div>
               {user ? (
                 <div className="flex flex-row items-center space-x-4">
-                  <Link className="flex justify-center items-center rounded" to={'/users/account'}>
+                  <Link className="flex justify-center items-center rounded" onClick={handleDirectToAccount}>
                     <Tooltip content={`Hello, ${user.userName}`} className="bg-blue-gray-50 text-black">
                       <img className="w-10" src="/src/assets/user_icon.svg" alt="user" />
                     </Tooltip>

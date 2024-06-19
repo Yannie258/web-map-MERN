@@ -10,7 +10,13 @@ const downloadFile = async (url, filePath) => {
   if (!response.ok) {
     throw new Error(`Failed to download file: ${response.statusText}`);
   }
-  //can overwrite the old file with the new one
+  // Ensure directory exists
+  const dirname = path.dirname(filePath);
+  if (!fs.existsSync(dirname)) {
+    fs.mkdirSync(dirname, { recursive: true });
+  }
+  
+  // Overwrite the old file with the new one
   const fileStream = fs.createWriteStream(filePath);
   return new Promise((resolve, reject) => {
     response.body.pipe(fileStream);
@@ -33,7 +39,7 @@ const readFile = async (filePath) => {
 };
 
 // Function to insert data into MongoDB
-const insertIntoDatabase = async (data, collectionName) => {
+const insertIntoDatabase = async (data, collectionName, name) => {
   const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -45,8 +51,16 @@ const insertIntoDatabase = async (data, collectionName) => {
     // Clear existing documents in collection
     await collection.deleteMany({});
 
+    // Add name property to each document
+    const updatedData = data.map(doc => {
+      return {
+        ...doc,
+        name: name
+      };
+    });
+
     // Insert new data
-    await collection.insertMany(data);
+    await collection.insertMany(updatedData);
 
     console.log(`Data inserted successfully into ${collectionName}`);
   } catch (error) {
@@ -87,7 +101,7 @@ const combineDocuments = async () => {
 };
 
 // Function to update database with files
-//it will redownload datasets from sources and update changes accordingly
+// It will redownload datasets from sources and update changes accordingly
 const updateDatabaseWithFiles = async () => {
   try {
     const urlToFileMap = {
@@ -96,6 +110,14 @@ const updateDatabaseWithFiles = async () => {
       SOCIAL_SCHOOL_URL: 'schulsozialarbeit.geojson',
       TEEN_SCHOOL_URL: 'jugendberufshilfen.geojson',
       // Add more mappings as needed
+    };
+
+    // Mapping of environment variables to their corresponding names
+    const envVarToNameMap = {
+      SCHOOL_URL: 'School',
+      KITA_URL: 'Kindergarden',
+      SOCIAL_SCHOOL_URL: 'Social child projects',
+      TEEN_SCHOOL_URL: 'Social teenager projects',
     };
 
     for (const envVar in urlToFileMap) {
@@ -112,7 +134,8 @@ const updateDatabaseWithFiles = async () => {
       const fileContent = await readFile(filePath);
       const jsonData = JSON.parse(fileContent);
 
-      await insertIntoDatabase(jsonData.features, envVar); // Assuming the data format is GeoJSON
+      const name = envVarToNameMap[envVar]; // Get the corresponding name for the category
+      await insertIntoDatabase(jsonData.features, envVar, name); // Pass the name to insertIntoDatabase
     }
 
     // After inserting data into individual collections, combine into CATEGORIES

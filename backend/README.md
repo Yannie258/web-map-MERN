@@ -7,6 +7,7 @@ This is a basic web application built using the MERN stack (MongoDB, Express.js,
 Before you begin, ensure you have met the following requirements:
 - Node.js and npm are installed.
 - MongoDB is installed and running.
+- git bash is installed 
 
 ## Tech
 The backend of this application is built using the following technologies:
@@ -25,18 +26,15 @@ Install the dependencies and devDependencies and start the server.
 ```sh
 npm install
 ```
-### Setting Up Environment Variables
+### Initialize database
 ```sh
-touch .env
+nodemon initDatabase
 ```
-### Add key to get access to ArgcGIS API
-inside file .env add:
+### Make sure that you got MongoDB account and a database instance
+### it should be better when you can install MongoDB Compass and ready to connect to your cluster
+add your connectstring inside file .env add:
 ```sh
-JWT_SECRETE_KEY=HRZEhj34kjghs,?jh
-NODE_ENV=production
-PORT=5000
-HOST_URL=http://127.0.0.1:3000
-
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.vkth2cd.mongodb.net/
 ```
 ### Run 
 run server file with this script:

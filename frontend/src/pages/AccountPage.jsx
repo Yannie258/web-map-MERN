@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../helpers/UserContext';
 // @ts-ignore
 import axios from 'axios';
@@ -12,11 +12,18 @@ function AccountPage() {
   const { isLoading, user, setUser, userDeleted, setUserDeleted } = useContext(UserContext);
   const [isEditingUserName, setIsEditingUserName] = useState(false);
   const [isEditingUserEmail, setIsEditingUserEmail] = useState(false);
-  const [userName, setUserName] = useState(user?.userName);
-  const [userEmail, setUserEmail] = useState(user?.email);
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [redirectToMainPage, setRedirectToMainPage] = useState(false);
 
-  // console.log('user account', user);
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      setUserName(user.userName);
+      setUserEmail(user.email);
+    }
+  }, [user]);
+
   if (!isLoading) {
     return <div>Loading...</div>;
   }
@@ -25,23 +32,16 @@ function AccountPage() {
     return <Navigate to={'/users/login'} />;
   }
 
-  const handleEditUserName = e => {
-    e.preventDefault();
+  const handleEditUserName = () => {
     setIsEditingUserName(!isEditingUserName);
-    //start from old name
-    setUserName(e.target.value);
   };
 
-  const handleEditUserEmail = e => {
-    e.preventDefault();
+  const handleEditUserEmail = () => {
     setIsEditingUserEmail(!isEditingUserEmail);
-    //start from old name
-    setUserEmail(e.target.value);
   };
 
   const handleSubmitAccountChange = async e => {
     e.preventDefault();
-    // Check if userName and userEmail are unchanged
     if (userName === user.userName && userEmail === user.email) {
       alert('No changes made');
       return;
@@ -52,9 +52,7 @@ function AccountPage() {
         userName: userName
       });
       setUser(data);
-      //alert('Edit successful');
       setRedirectToMainPage(true);
-
     } catch (error) {
       console.log('Edit Error: ' + error);
       alert('Edit failed, please try again');
@@ -77,7 +75,7 @@ function AccountPage() {
   };
 
   if (redirectToMainPage) {
-    window.location.href = '/'; // get data from useContext again
+    window.location.href = '/';
   }
 
   return (
@@ -101,18 +99,14 @@ function AccountPage() {
                     onChange={e => setUserName(e.target.value)}
                     required
                   />
-                  {!isEditingUserName ? (
-                    <Button
-                      size="sm"
-                      color={user.userName === userName ? 'white' : 'blue-gray'}
-                      onClick={handleEditUserName}
-                      className="!absolute right-1 top-1 rounded"
-                    >
-                      <span>edit</span>
-                    </Button>
-                  ) : (
-                    ''
-                  )}
+                  <Button
+                    size="sm"
+                    color={isEditingUserName ? 'blue-gray' : 'white'}
+                    onClick={handleEditUserName}
+                    className="!absolute right-1 top-1 rounded"
+                  >
+                    <span>edit</span>
+                  </Button>
                 </div>
                 <div className="mt-5 relative flex w-full max-w-[24rem]">
                   <Input
@@ -124,19 +118,14 @@ function AccountPage() {
                     onChange={e => setUserEmail(e.target.value)}
                     required
                   />
-
-                  {!isEditingUserEmail ? (
-                    <Button
-                      size="sm"
-                      color={user.email === userEmail ? 'white' : 'blue-gray'}
-                      onClick={handleEditUserEmail}
-                      className="!absolute right-1 top-1 rounded"
-                    >
-                      <span>edit</span>
-                    </Button>
-                  ) : (
-                    ''
-                  )}
+                  <Button
+                    size="sm"
+                    color={isEditingUserEmail ? 'blue-gray' : 'white'}
+                    onClick={handleEditUserEmail}
+                    className="!absolute right-1 top-1 rounded"
+                  >
+                    <span>edit</span>
+                  </Button>
                 </div>
 
                 <div className="mt-5 relative flex w-full max-w-[24rem]">
@@ -144,7 +133,7 @@ function AccountPage() {
                     variant="static"
                     label="Home"
                     placeholder="Home Address"
-                    value={user.homeAddress.address ? user.homeAddress.address : 'Home Address was not set'}
+                    value={user.homeAddress?.address || 'Home Address was not set'}
                   />
                 </div>
 
@@ -153,7 +142,7 @@ function AccountPage() {
                     variant="static"
                     label="Favourite Category"
                     placeholder="favourite"
-                    value={user.favourite.address ? `${user.favourite.category}` : 'Favourite was not set'}
+                    value={user.favourite?.category || 'Favourite was not set'}
                   />
                 </div>
 
@@ -162,7 +151,7 @@ function AccountPage() {
                     variant="static"
                     label="Favourite Address"
                     placeholder="Static"
-                    value={user.favourite.address ? `${user.favourite.address}` : 'Favourite was not set'}
+                    value={user.favourite?.address || 'Favourite was not set'}
                   />
                 </div>
               </div>

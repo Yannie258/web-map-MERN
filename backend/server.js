@@ -44,7 +44,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // connect to mongoDB database
-const mongoDbUrl = 'mongodb://127.0.0.1:27017/webmap'
+// const mongoDbUrl = 'mongodb://127.0.0.1:27017/webmap'
+const mongoDbUrl = process.env.MONGO_URI
 
 mongoose
   .connect(mongoDbUrl)

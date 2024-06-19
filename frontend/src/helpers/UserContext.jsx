@@ -30,10 +30,10 @@ export function UserContextProvider({ children }) {
     // }
     if (!categories) {
       const colorMap = {
-        Schulen: '#ff9843',
-        Kindertageseinrichtungen: '#ff6868',
-        Schulsozialarbeit: '#86a7fc',
-        Jugendberufshilfen: '#3468c0'
+        School: '#ff9843',
+        Kindergarden: '#ff6868',
+        'Social child projects': '#86a7fc',
+        'Social teenager projects': '#3468c0'
       };
       axios
         .get('/categories/all')

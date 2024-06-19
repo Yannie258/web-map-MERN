@@ -8,9 +8,9 @@ import FilterOption from '../components/FilterOption';
 import RoutingAndDirectionWidget from '../components/RoutingAndDirectionWidget';
 import SearchWidget from '../components/SearchWidget';
 import { createPopupContent } from '../helpers/PopUpConfig';
-import { createPopUpHome }  from '../helpers/PopUpHome';
-import { UserContext } from '../helpers/UserContext';
 import { createPopUpFavourite } from '../helpers/PopUpFavourite';
+import { createPopUpHome } from '../helpers/PopUpHome';
+import { UserContext } from '../helpers/UserContext';
 
 function Map() {
   const mapRef = useRef(null);
@@ -22,41 +22,11 @@ function Map() {
   const [forwardDirection, setForwardDirection] = useState(false);
   const [openRoute, setOpenRoute] = useState(false);
 
-  console.log('main map',user)
+  // console.log('main map',user)
+  // console.log('categories',categories)
   // @ts-ignore
   esriConfig.apiKey = import.meta.env.VITE_ARCGIS_KEY;
   const apiKey = esriConfig.apiKey;
-  const getSymbolColorForCategory = categoryName => {
-    return categoriesColor[categoryName] || '#000000';
-  };
-
-  // Function to handle category selection
-  const handleCategoryChange = categories => {
-    setSelectedCategories(categories.map(category => category.value));
-  };
-
-  const handleSelectHomePlace = event => {
-    event.preventDefault();
-    const selectedPlace = event.target.value;
-  };
-
-  const handleSideBarButton = e => {
-    e.preventDefault();
-    // console.log('open', forwardDirection);
-    setForwardDirection(!forwardDirection);
-  };
-
-  const removeHomeAddress = () => {
-    setUser(prevUser => ({
-      ...prevUser,
-      homeAddress: null
-    }));
-  };
-
-  const map = new ArcGisMap({
-    basemap: 'arcgis/navigation'
-  });
-
   useEffect(() => {
     if (!mapRef?.current || !categories) return;
     // @ts-ignore
@@ -187,6 +157,37 @@ function Map() {
 
     return () => view && view.destroy();
   }, [mapRef, categories, selectedCategories, user]);
+
+  const getSymbolColorForCategory = categoryName => {
+    return categoriesColor[categoryName] || '#000000';
+  };
+
+  // Function to handle category selection
+  const handleCategoryChange = categories => {
+    setSelectedCategories(categories.map(category => category.value));
+  };
+
+  const handleSelectHomePlace = event => {
+    event.preventDefault();
+    const selectedPlace = event.target.value;
+  };
+
+  const handleSideBarButton = e => {
+    e.preventDefault();
+    // console.log('open', forwardDirection);
+    setForwardDirection(!forwardDirection);
+  };
+
+  const removeHomeAddress = () => {
+    setUser(prevUser => ({
+      ...prevUser,
+      homeAddress: null
+    }));
+  };
+
+  const map = new ArcGisMap({
+    basemap: 'arcgis/navigation'
+  });
 
   return (
     <div className="bg-amber-100 w-screen h-screen relative">

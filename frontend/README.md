@@ -8,6 +8,7 @@ Before you begin, ensure you have met the following requirements:
 
 - Node.js and npm are installed.
 - MongoDB is installed and running.
+- git bash
 
 ## Tech
 
@@ -36,27 +37,30 @@ npm install
 
 ### Setting Up Environment Variables
 
+create .env file:
+
 ```sh
 touch .env
 ```
 
 ### Add key to get access to ArgcGIS API
 
-inside file .env add:
+inside file .env add your ArcGIS API Key:
+
+> Note: to get API Key, you need to create an account in [ArcGIS Developers](https://developers.arcgis.com/),
+> assign API SDK for Javascripts and set an [API Key](https://developers.arcgis.com/api-keys/)
 
 ```sh
-VITE_ARCGIS_KEY=AAPK068f033f411a491ea0ce16c156c385b2M6TFdFKxESw75XZz5466meiJmHTjMip_z5LAmavA0ZqWe4Ex6tcNufmt3SEm0snn
+VITE_ARCGIS_KEY=<Your_API_KEY>
 ```
 
-### Run
+## Run
 
 ```sh
 npm run dev
 ```
 
-For production environments...
-
-## Run App in browser
+### Run App in browser
 
 ```sh
 127.0.0.1:3000
@@ -65,3 +69,4 @@ For production environments...
 ## License
 
 - [Yen Nguyen](https://www.linkedin.com/in/yen-nguyen-521997207/)
+- Git Repo: https://github.com/Yannie258/web-map-MERN

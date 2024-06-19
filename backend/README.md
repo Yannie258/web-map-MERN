@@ -27,29 +27,56 @@ Install the dependencies and devDependencies and start the server.
 npm install
 ```
 ### Initialize database
+- Make sure that you got MongoDB account and install Mongo Compass or use Mongo Atlas Clouds
+- Your MongoDB should be already connected to your cluster
+- Create file .env and add your connectstring inside:
+```sh
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.vkth2cd.mongodb.net/webmap
+```
+> Note: `/webmap` is the default database name 
+- Add more variables to initiate Database from datasets [Open Data Chemnitz Portal](https://portal-chemnitz.opendata.arcgis.com/)
+- This app serves for 4 categories:
+ a. [schools (Grundschule, Oberschule, Förderschule, Gymnasium, Berufsbildende Schule, …)](https://portal-chemnitz.opendata.arcgis.com/datasets/chemnitz::schulen/about) - [Example here](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulen_OpenData/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson)
+b. [kindergarden (Kindertageseinrichtungen)](https://portal-chemnitz.opendata.arcgis.com/datasets/chemnitz::kindertageseinrichtungen/about) - [Example here](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Kindertageseinrichtungen_Sicht/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson)
+c. [social child projects (Schulsozialarbeit)](https://portal-chemnitz.opendata.arcgis.com/datasets/chemnitz::schulsozialarbeit/about) - [Example here](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulsozialarbeit_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson)
+d. [social teenager projects ( Jugendberufshilfe)](https://portal-chemnitz.opendata.arcgis.com/datasets/chemnitz::jugendberufshilfen/about) - [Example here](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Jugendberufshilfen_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson)
+
+>> Note: 
+*Data can be changed by administrator of the portal anytime
+*[ArcGIS API](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulen_OpenData/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson) services provide Geojson format, you can custom query to get the necessary attributes, I would like keep all in default for easy testing
+```sh
+SCHOOL_URL=<API_resoure_for_SCHOOL>
+KITA_URL=<API_resoure_for_KITA>
+SOCIAL_SCHOOL_URL=<API_resoure_for_SOCIAL_SCHOOL>
+TEEN_SCHOOL_URL=<API_resoure_for_TEEN_SCHOOL>
+```
+### Run initiate Database
 ```sh
 nodemon initDatabase
 ```
-### Make sure that you got MongoDB account and a database instance
-### it should be better when you can install MongoDB Compass and ready to connect to your cluster
-add your connectstring inside file .env add:
+### Set environment variable for server
+add to .env file:
 ```sh
-MONGO_URI=mongodb+srv://<username>:<password>@cluster0.vkth2cd.mongodb.net/
+JWT_SECRETE_KEY=<YOUR_OWN_SECRETE_KEY>
+PORT=5000
+HOST_URL=http://127.0.0.1:3000
 ```
+>Note: JWT Key can be anything just you know
 ### Run 
 run server file with this script:
 ```sh
 nodemon start
 ```
-Server will in in port 5000
-- ex: categories
+Server will run in port 5000
+- ex: categories endpoint
 ```sh
 127.0.0.1:5000/api/webmap/v1/categories/all
 ```
-- ex: users
+- ex: users endpoint
 ```sh
 127.0.0.1:5000/api/webmap/v1/users/all
 ```
 
 ## License
 - [Yen Nguyen](https://www.linkedin.com/in/yen-nguyen-521997207/)
+- Git Repo: https://github.com/Yannie258/web-map-MERN

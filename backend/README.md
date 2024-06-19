@@ -41,8 +41,8 @@ b. [kindergarden (Kindertageseinrichtungen)](https://portal-chemnitz.opendata.ar
 c. [social child projects (Schulsozialarbeit)](https://portal-chemnitz.opendata.arcgis.com/datasets/chemnitz::schulsozialarbeit/about) - [Example here](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulsozialarbeit_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson)
 d. [social teenager projects ( Jugendberufshilfe)](https://portal-chemnitz.opendata.arcgis.com/datasets/chemnitz::jugendberufshilfen/about) - [Example here](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Jugendberufshilfen_FL_1/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson)
 
->> Note: 
-*Data can be changed by administrator of the portal anytime
+>Note: 
+*Data can be changed by administrator of the portal anytime 
 *[ArcGIS API](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulen_OpenData/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson) services provide Geojson format, you can custom query to get the necessary attributes, I would like keep all in default for easy testing
 ```sh
 SCHOOL_URL=<API_resoure_for_SCHOOL>
@@ -51,6 +51,7 @@ SOCIAL_SCHOOL_URL=<API_resoure_for_SOCIAL_SCHOOL>
 TEEN_SCHOOL_URL=<API_resoure_for_TEEN_SCHOOL>
 ```
 ### Run initiate Database
+This code will create a collection WEB_MAP_CATEGORIES for all categories, which contains all documents of them
 ```sh
 nodemon initDatabase
 ```

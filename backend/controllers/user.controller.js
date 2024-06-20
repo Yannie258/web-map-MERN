@@ -12,7 +12,7 @@ exports.createUser = async (req, res) => {
         // Check if the user already exists
         const existingUser = await User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] });
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(409).json({ message: 'User already exists' });
         }
         //generate new password
         const salt = await bcrypt.genSalt(10);
@@ -26,9 +26,9 @@ exports.createUser = async (req, res) => {
 
         //save user and send response
         const user = await newUser.save();
-        res.status(200).json(user);
+        res.status(201).json(user);
     } catch (err) {
-        res.status(500).json('Register error: ' + err);
+        res.status(500).json({ message: 'An internal server serror occurred: ', error: err.message });
     }
 };
 
@@ -37,11 +37,11 @@ exports.userLogin = async (req, res) => {
     try {
         // Find user by email
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json('User not found');
+        if (!user) return res.status(401).json('User not found');
 
         // Validate password
         const validPassword = await bcrypt.compare(password, user.password);
-        if (!validPassword) return res.status(400).json('Incorrect password');
+        if (!validPassword) return res.status(401).json('Incorrect password');
 
         // Generate token
         const token = jwt.sign({
@@ -51,9 +51,9 @@ exports.userLogin = async (req, res) => {
         }, privateKey, { expiresIn: '1h' }); // this session cookies expires in 1h, after 1h user is automatically logout and has to refresh the page by logging again
 
         // Set cookie
-        res.cookie('token', token).json(user);
+        res.cookie('token', token).status(200).json(user);
     } catch (err) {
-        res.status(500).json({ message: 'Login error', error: err.message });
+        res.status(500).json({ message: 'An internal server serror occurred: ', error: err.message });
     }
 
 }
@@ -79,7 +79,6 @@ exports.getUserProfile = async (req, res) => {
             }
         }
        
-
     } else {
         res.json(null);
     }
@@ -89,13 +88,13 @@ exports.editUserAccount = async(req, res) => {
     await User.findByIdAndUpdate(req.params.id,req.body, { new: true })
       .then((updatedUser) => {
         if (updatedUser) {
-          res.status(200).json(updatedUser) // Respond with the updated user
+          res.status(201).json(updatedUser) // Respond with the updated user
         } else {
           res.status(404).send('Person not found!')
         }
       })
       .catch((err) => {
-        res.status(500).send(err)
+        res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message })
       })
 }
 
@@ -104,7 +103,7 @@ exports.getAllUser = async (req,res)=>{
         .then((persons) => {
             res.status(200).send(persons)
         })
-    .catch((err)=>(res.status(500).send(err)))
+    .catch((err)=>(res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message })))
 }
 
 exports.getUser = async (req, res) => {
@@ -117,7 +116,7 @@ exports.getUser = async (req, res) => {
     res.json({ exists: !!user }); // Send true if user exists, false otherwise
   } catch (error) {
     console.error('Error checking user existence:', error);
-    res.status(500).json({ message: 'Internal server error when get user data' });
+    res.status(500).json({ message: 'An internal server serror occurred: ', error: err.message });
   }
 }
 
@@ -131,7 +130,7 @@ exports.getUserById = async (req, res) => {
             res.status(404).json({ message: 'User not found' });
         }
     } catch (err) {
-        res.status(500).send({ message: 'An internal server error occurred' });
+        res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message });
     }
 }
 
@@ -139,9 +138,9 @@ exports.userLogOut = async (req,res)=>{
      try {
     // Clear the cookie
     await res.clearCookie('token');
-    res.status(200).send({ message: 'Logged out successfully' });
+    res.status(200).send({ message: 'Successfully logged out' });
   } catch (error) {
-    res.status(500).send({ message: 'Error logging out' });
+    res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message });
   }
 }
 
@@ -155,37 +154,7 @@ exports.deleteUser = async (req, res) => {
         }
 
     } catch (error) {
-        res.status(500).send({ message: 'An internal server error occurred' });
-    }
-}
-
-exports.updateHomeAdressForUser = async (req, res) => {
-    const { id } = req.params;
-    const { homeAdress } = req.body;
-    try {
-        const updatedUser = await User.findByIdAndUpdate(id, { homeAdress }, { new: true });
-        if (updatedUser) {
-            res.status(200).json(updatedUser);
-        } else {
-            res.status(404).json({ message: 'User not found' });
-        }
-    } catch (err) {
-        res.status(500).send({ message: 'Error updating address' });
-    }
-}
-
-exports.updateFavouriteForUser = async (req, res) => {
-     const { id } = req.params;
-    const { favourite } = req.body;
-    try {
-        const updatedUser = await User.findByIdAndUpdate(id, { favourite }, { new: true });
-        if (updatedUser) {
-            res.status(200).json(updatedUser);
-        } else {
-            res.status(404).json({ message: 'User not found' });
-        }
-    } catch (err) {
-        res.status(500).send({ message: 'Error updating address' });
+        res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message });
     }
 }
 
@@ -202,9 +171,9 @@ exports.removeHome = async (req, res) => {
         return res.status(404).send('User not found');
         }
 
-        res.status(200).json(user);
+        res.status(201).json(user);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message });
   }
 }
 
@@ -221,9 +190,9 @@ exports.removeFavourite = async (req, res) => {
         return res.status(404).send('User not found');
         }
 
-        res.send(user);
+        res.status(201).send(user);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message });
   }
 }
 

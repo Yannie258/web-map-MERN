@@ -9,8 +9,8 @@ function Documentation() {
           <br />
           <p className="mb-3">
             This is a web map application that allows users to register, login, logout, and manage their accounts to
-            access additional features. Users can explore a map where places from four categories—school, kindergarten,
-            social school, and teenager support school—are marked with different colors.
+            access additional features. Users can explore a map where places from four categories such as school,
+            kindergarten, social school, and teenager support school — which are marked with different colors.
           </p>
           <a className="hover:underline italic text-primary" href="https://www.arcgis.com/index.html">
             ReferenceAPI is taken from ArcGIS
@@ -63,8 +63,8 @@ function Documentation() {
           <p className="mb-3">As a registered user, you can:</p>
           <ul className="list-disc pl-6 mb-4">
             <li>Filter one or more categories on the map.</li>
-            <li>Set a place as your home location.</li>
-            <li>Mark facilities as favorite places.</li>
+            <li>Set/ remove a place as your home location.</li>
+            <li>Mark/ remove facilities as favorite places.</li>
             <li>
               View details of categories by clicking on Points of Interest (POIs), including names, addresses, and
               contact details displayed in a popup.
@@ -75,12 +75,12 @@ function Documentation() {
             The application ensures that the dataset is clean by removing duplicates, correcting errors, and handling
             missing values. Data formats are standardized for easy integration and analysis.
           </p>
-          <p className="mb-3">Non-registered users can still:</p>
+          <p className="mb-3">Non-registered users can:</p>
           <ul className="list-disc pl-6 mb-4">
             <li>View the map.</li>
             <li>Search for places and view POI details in a popup.</li>
           </ul>
-          <p className="mb-3">However, they have limited functionality:</p>
+          <p className="mb-3">However, you have limited functionality:</p>
           <ul className="list-disc pl-6">
             <li>Cannot filter facilities.</li>
             <li>Cannot set favorite or home addresses.</li>

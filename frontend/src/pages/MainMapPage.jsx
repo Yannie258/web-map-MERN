@@ -22,8 +22,6 @@ function Map() {
   const [forwardDirection, setForwardDirection] = useState(false);
   const [openRoute, setOpenRoute] = useState(false);
 
-  // console.log('main map',user)
-  // console.log('categories',categories)
   // @ts-ignore
   esriConfig.apiKey = import.meta.env.VITE_ARCGIS_KEY;
   const apiKey = esriConfig.apiKey;
@@ -41,7 +39,7 @@ function Map() {
     });
 
     setViewMap(view);
-    // console.log('test', user);
+
     view
       .when(() => {
         const addGraphics = () => {
@@ -61,7 +59,7 @@ function Map() {
                   wkid: 4326
                 }
               };
-              // console.log('checkpoint', point);
+
               const markerSymbol = {
                 type: 'simple-marker',
                 color: getSymbolColorForCategory(category.name),
@@ -82,7 +80,6 @@ function Map() {
               });
 
               if (selectedCategories.length === 0 || selectedCategories.includes(category.name)) {
-                console.log('add');
                 view.graphics.add(pointGraphic);
               }
             }
@@ -93,7 +90,6 @@ function Map() {
           //when favourite is vailable, display symbol favourite
           // back end user profile may send an emty object of favourite or home address, if statement can pass, we need to set more condition for Object.keys
           if (user.favourite.address) {
-            console.log('favourite', user.favourite);
             const favouritePoint = {
               type: 'point',
               x: user.favourite.favouriteLongitude,
@@ -174,7 +170,6 @@ function Map() {
 
   const handleSideBarButton = e => {
     e.preventDefault();
-    // console.log('open', forwardDirection);
     setForwardDirection(!forwardDirection);
   };
 

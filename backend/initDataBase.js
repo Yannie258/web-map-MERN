@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { MongoClient } = require('mongodb');
 
-// Function to download a file from a URL
+//  download a file from a URL
 const downloadFile = async (url, filePath) => {
   const response = await fetch(url);
   if (!response.ok) {
@@ -25,7 +25,7 @@ const downloadFile = async (url, filePath) => {
   });
 };
 
-// Function to read a file and return its content
+//  read a file and return its content
 const readFile = async (filePath) => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
@@ -38,7 +38,7 @@ const readFile = async (filePath) => {
   });
 };
 
-// Function to insert data into MongoDB
+// insert data into MongoDB
 const insertIntoDatabase = async (data, collectionName, name) => {
   const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -51,7 +51,7 @@ const insertIntoDatabase = async (data, collectionName, name) => {
     // Clear existing documents in collection
     await collection.deleteMany({});
 
-    // Add name property to each document
+    // Add name property to each document, name is here category art
     const updatedData = data.map(doc => {
       return {
         ...doc,
@@ -70,7 +70,7 @@ const insertIntoDatabase = async (data, collectionName, name) => {
   }
 };
 
-// Function to combine documents into one collection
+// combine documents into one collection
 const combineDocuments = async () => {
   const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -100,7 +100,7 @@ const combineDocuments = async () => {
   }
 };
 
-// Function to update database with files
+// update database with files
 // It will redownload datasets from sources and update changes accordingly
 const updateDatabaseWithFiles = async () => {
   try {
@@ -109,7 +109,6 @@ const updateDatabaseWithFiles = async () => {
       KITA_URL: 'kindertageseinrichtungen.geojson',
       SOCIAL_SCHOOL_URL: 'schulsozialarbeit.geojson',
       TEEN_SCHOOL_URL: 'jugendberufshilfen.geojson',
-      // Add more mappings as needed
     };
 
     // Mapping of environment variables to their corresponding names

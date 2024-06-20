@@ -17,7 +17,6 @@ function AccountPage() {
   const [redirectToMainPage, setRedirectToMainPage] = useState(false);
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       setUserName(user.userName);
       setUserEmail(user.email);
@@ -54,7 +53,6 @@ function AccountPage() {
       setUser(data);
       setRedirectToMainPage(true);
     } catch (error) {
-      console.log('Edit Error: ' + error);
       alert('Edit failed, please try again');
     }
   };

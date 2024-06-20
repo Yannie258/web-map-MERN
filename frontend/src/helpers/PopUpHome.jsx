@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const createPopUpHome = user => {
-  //console.log(user)
+
   const popupContent = document.createElement('div');
   popupContent.innerHTML = `
     <ul>

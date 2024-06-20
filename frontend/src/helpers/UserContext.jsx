@@ -10,7 +10,6 @@ export function UserContextProvider({ children }) {
   const [categoriesColor, setCategoriesColor] = useState(null);
   const [userDeleted, setUserDeleted] = useState(false); // State to track user deletion
 
-  // console.log('context', user);
   //userEffect doesn't support async/await
   //This ensures that the profile data is only fetched if the user information is not already available.
   useEffect(() => {
@@ -21,13 +20,7 @@ export function UserContextProvider({ children }) {
         setUserDeleted(false);
       })
     }
-    // else {
-    //   axios.get('/users/:id').then(({ data }) => {
-    //     setUser(data);
-    //     setIsLoading(true);
-    //     // setUserDeleted(true);
-    //   });
-    // }
+
     if (!categories) {
       const colorMap = {
         School: '#ff9843',
@@ -38,7 +31,6 @@ export function UserContextProvider({ children }) {
       axios
         .get('/categories/all')
         .then(response => {
-          // console.log('data', response);
           // Assuming response.data is an array of places with longitude data
           setCategories(response.data);
           setCategoriesColor(colorMap);
@@ -46,7 +38,7 @@ export function UserContextProvider({ children }) {
         .catch(error => {
           console.error('Error fetching data:', error);
         });
-      // console.log('object', categories);
+
     }
   }, [user, categories]);
   return (

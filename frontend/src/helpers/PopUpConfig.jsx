@@ -28,7 +28,6 @@ export const createPopupContent = (category, user) => {
   // Add event listener for the button
   const addButton = popupContent.querySelector('#add-favourite-button');
   addButton.addEventListener('click', async () => {
-    console.log('add favorite clicked', category);
     try {
       const res = await axios.put(`/users/${user._id}`, {
         favourite: {
@@ -38,9 +37,10 @@ export const createPopupContent = (category, user) => {
           favouriteLatitude: category.geometry.coordinates[1]
         }
       });
-      alert('Added to favourites successfully');
+      
       window.location.href = '/';
     } catch (error) {
+      alert('Can not add to favourites successfully');
       console.error(error);
     }
   });
@@ -48,12 +48,11 @@ export const createPopupContent = (category, user) => {
   const getMoreInfos = popupContent.querySelector('#more-info');
   getMoreInfos.addEventListener('click', async () => {
     try {
-      console.log('coords', category.geometry.coordinates[0], category.geometry.coordinates[1]);
       const res = await axios.post('/location-info-more', {
         lat: category.geometry.coordinates[1],
         lon: category.geometry.coordinates[0]
       });
-      console.log('nominatim', res.data);
+
 
       const additionalInfo = popupContent.querySelector('#additional-info');
       if (res.data.extratags) {

@@ -16,9 +16,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "serve": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "initDatabase": "nodemon initDataBase.js"
+    "initDatabase": "node initDatabase.js"
   },
   "keywords": [],
   "author": "",

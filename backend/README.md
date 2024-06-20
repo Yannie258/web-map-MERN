@@ -30,8 +30,14 @@ npm install
 - Make sure that you got MongoDB account and install Mongo Compass or use Mongo Atlas Clouds
 - Your MongoDB should be already connected to your cluster
 - Create file .env and add your connectstring inside:
+* When use MongoDB Cloud
 ```sh
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.vkth2cd.mongodb.net/webmap
+```
+
+* When use MongoDB Compass
+```sh
+MONGO_URI=mongodb://127.0.0.1:27017/webmap
 ```
 > Note: `/webmap` is the default database name 
 - Add more variables to initiate Database from datasets [Open Data Chemnitz Portal](https://portal-chemnitz.opendata.arcgis.com/)
@@ -53,7 +59,7 @@ TEEN_SCHOOL_URL=<API_resoure_for_TEEN_SCHOOL>
 ### Run initiate Database
 This code will create a collection WEB_MAP_CATEGORIES for all categories, which contains all documents of them
 ```sh
-nodemon initDatabase
+npm run initDatabase
 ```
 ### Set environment variable for server
 add to .env file:

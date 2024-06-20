@@ -88,7 +88,6 @@ function Map() {
 
           // Add a graphic for the home address from user context
           //when favourite is vailable, display symbol favourite
-          // back end user profile may send an emty object of favourite or home address, if statement can pass, we need to set more condition for Object.keys
           if (user.favourite.address) {
             const favouritePoint = {
               type: 'point',
@@ -191,7 +190,7 @@ function Map() {
           <div className="relative">
             <FilterOption handleCategoryChange={handleCategoryChange} />
             {user.homeAddress.address && user.favourite && (
-              <div className="fixed top-64 left-4 z-20 bg-white rounded">
+              <div className="fixed top-64 left-4 z-20  rounded">
                 <Tooltip content={!openRoute ? 'show route' : 'hide route'}>
                   <button onClick={e => setOpenRoute(!openRoute)}>
                     <img

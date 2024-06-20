@@ -18,10 +18,9 @@ function LoginPage() {
         password
       });
       setUser(data);
-      // alert('Login successful');
       setRedirectToMainPage(true);
     } catch (error) {
-      alert('Login failed! Your email or password was wrong. Please try again!');
+      alert('Login failed! Your email or password was wrong or your account does not exist!');
     }
   };
 

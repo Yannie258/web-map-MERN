@@ -22,17 +22,37 @@ The backend of this application is built using the following technologies:
 
 ## Installation for backend
 
-Install the dependencies and devDependencies and start the server.
+### Install the dependencies 
+- open git bash inside backend directory and run
 ```sh
-npm install
+npm install 
 ```
-### Initialize database
-- Make sure that you got MongoDB account and install Mongo Compass or use Mongo Atlas Clouds
-- Your MongoDB should be already connected to your cluster
+
+### Set environment variable
+
 - Create file .env and add your connectstring inside:
-* When use MongoDB Cloud
 ```sh
-MONGO_URI=mongodb+srv://<username>:<password>@cluster0.vkth2cd.mongodb.net/webmap
+touch .env
+```
+-  Add variables to file .env 
+```sh
+HOST_URL=http://127.0.0.1:3000
+PORT=5000
+
+MONGO_URI=
+
+SCHOOL_URL=
+KITA_URL=
+SOCIAL_SCHOOL_URL=
+TEEN_SCHOOL_URL=
+
+JWT_SECRETE_KEY=
+
+```
+
+* When use MongoDB Cloud:
+```sh
+MONGO_URI=mongodb+srv://<username>:<password>@<hostname>/webmap
 ```
 
 * When use MongoDB Compass
@@ -40,6 +60,9 @@ MONGO_URI=mongodb+srv://<username>:<password>@cluster0.vkth2cd.mongodb.net/webma
 MONGO_URI=mongodb://127.0.0.1:27017/webmap
 ```
 > Note: `/webmap` is the default database name 
+- This string is different based on your connection method to cluster
+
+* Setup variables for category urls: 
 - Add more variables to initiate Database from datasets [Open Data Chemnitz Portal](https://portal-chemnitz.opendata.arcgis.com/)
 - This app serves for 4 categories:
  a. [schools (Grundschule, Oberschule, Förderschule, Gymnasium, Berufsbildende Schule, …)](https://portal-chemnitz.opendata.arcgis.com/datasets/chemnitz::schulen/about) - [Example here](https://services6.arcgis.com/jiszdsDupTUO3fSM/arcgis/rest/services/Schulen_OpenData/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson)
@@ -56,23 +79,28 @@ KITA_URL=<API_resoure_for_KITA>
 SOCIAL_SCHOOL_URL=<API_resoure_for_SOCIAL_SCHOOL>
 TEEN_SCHOOL_URL=<API_resoure_for_TEEN_SCHOOL>
 ```
-### Run initiate Database
-This code will create a collection WEB_MAP_CATEGORIES for all categories, which contains all documents of them
-```sh
-npm run initDatabase
-```
-### Set environment variable for server
-add to .env file:
+
+* Set environment variable for server
 ```sh
 JWT_SECRETE_KEY=<YOUR_OWN_SECRETE_KEY>
 PORT=5000
 HOST_URL=http://127.0.0.1:3000
 ```
 >Note: JWT Key can be anything just you know
+
+## Initialize database
+- Make sure that you got MongoDB account and install Mongo Compass or use Mongo Atlas Clouds
+- Your MongoDB should be already connected to your cluster
+
+### Run initiate Database
+This code will create a collection WEB_MAP_CATEGORIES for all categories, which contains all documents of them
+```sh
+npm run initDatabase
+```
 ### Run 
 run server file with this script:
 ```sh
-nodemon start
+npm run serve
 ```
 Server will run in port 5000
 - ex: categories endpoint

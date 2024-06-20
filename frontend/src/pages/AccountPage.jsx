@@ -63,7 +63,6 @@ function AccountPage() {
       try {
         await axios.delete(`/users/${user._id}`);
         setUser(null);
-        alert('Delete successful');
         setRedirectToMainPage(true);
         setUserDeleted(true);
       } catch (error) {
@@ -130,7 +129,7 @@ function AccountPage() {
                   <Input
                     variant="static"
                     label="Home"
-                    placeholder="Home Address"
+                    placeholder="Home"
                     value={user.homeAddress?.address || 'Home Address was not set'}
                   />
                 </div>
@@ -147,7 +146,7 @@ function AccountPage() {
                 <div className="mt-5 relative flex w-full max-w-[24rem]">
                   <Input
                     variant="static"
-                    label="Favourite Address"
+                    label="Favourite"
                     placeholder="Static"
                     value={user.favourite?.address || 'Favourite was not set'}
                   />

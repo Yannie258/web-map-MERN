@@ -19,9 +19,7 @@ export const createPopupContent = (category, user) => {
     <div id='configPOIPopup'>
       <button id='add-favourite-button'>Add to Favourite</button>
       <button id='more-info'>More about this place</button>
-    </div>
-
-    
+    </div>  
     <div id="additional-info"></div>
   `;
 

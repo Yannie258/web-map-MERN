@@ -1,9 +1,9 @@
 // @ts-nocheck
 
+import { Button, Input } from '@material-tailwind/react';
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { Input, Button } from '@material-tailwind/react';
 import { checkUserExists } from '../helpers/utilsMethods';
 
 function RegisterPage() {
@@ -26,7 +26,6 @@ function RegisterPage() {
         email,
         password
       });
-      alert('Registered successfully!');
       setRedirectToMainPage(true);
     } catch (error) {
       alert('Login failed, please try again');

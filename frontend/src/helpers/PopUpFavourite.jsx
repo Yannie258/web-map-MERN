@@ -20,7 +20,6 @@ export const createPopUpFavourite = user => {
       //The DELETE method is typically used for deleting entire resources, not for updating or removing specific fields within a resource.
 
       const res = await axios.put(`/users/${user._id}/removeFavourite`);
-      alert('deleted favourite successfully');
       window.location.href = '/';
     } catch (error) {
       console.error('Error removing favourite address:', error.message);

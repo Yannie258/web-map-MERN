@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { UserContext } from '../helpers/UserContext';
 
 function SearchWidget({ view, onSelectPlace }) {
-  const { user , categories} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (!view || !view.ui) return;
@@ -44,7 +44,7 @@ function SearchWidget({ view, onSelectPlace }) {
                   homeLatitude: result.feature.geometry.latitude
                 }
               });
-              alert('add home successfully');
+              //alert('add home successfully');
               window.location.href = '/';
             }
           } catch (error) {
@@ -53,9 +53,7 @@ function SearchWidget({ view, onSelectPlace }) {
           }
           //it does not work with normal button onclick event
           // therefore we have to change to this approach
-          // TODO: get address and coordinators and send request to update user infor
-          //same with favourite feature
-          //design css
+          
         });
       }   
 

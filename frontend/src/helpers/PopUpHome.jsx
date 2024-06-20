@@ -20,7 +20,6 @@ export const createPopUpHome = user => {
             //The DELETE method is typically used for deleting entire resources, not for updating or removing specific fields within a resource.
 
             await axios.put(`/users/${user._id}/removeHome`);
-            alert('deleted home successfully')
             window.location.href = '/';
         } catch (error) {
             console.error('Error removing home address:', error.message);

@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 export const createPopUpFavourite = user => {
-
   const popupContent = document.createElement('div');
   popupContent.innerHTML = `
     <ul>
-         <li><b>Longitude:</b> ${user.favourite.category}</li>
-         <li><b>Latitude:</b> ${user.favourite.address}</li>
+         <li><b>Category:</b> ${user.favourite.category}</li>
+         <li><b>Address:</b> ${user.favourite.address}</li>
          <li><b>Longitude:</b> ${user.favourite.favouriteLongitude}</li>
          <li><b>Latitude:</b> ${user.favourite.favouriteLatitude}</li>
     </ul>

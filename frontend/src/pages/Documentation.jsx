@@ -7,9 +7,9 @@ function Documentation() {
         <section>
           <h1 className="font-bold text-2xl">Introduction</h1>
           <p className="mb-3">
-            This is a web map application that allows you to register, login, logout, and manage your accounts to access
-            additional features. You can explore a map where places from four categories such as school, kindergarten,
-            social school, and teenager support school are marked with different colors.
+            This is a web map application that allows users to register, login, logout, and manage their accounts to
+            access additional features. Users can explore a map where places from four categories such as school,
+            kindergarten, social school, and teenager support school — which are marked with different colors.
           </p>
           <a className="hover:underline italic text-primary" href="https://www.arcgis.com/index.html">
             Reference API is taken from ArcGIS
@@ -60,6 +60,9 @@ function Documentation() {
           <br />
           <h3 className="mb-3 text-xl font-bold">As a registered user, you can:</h3>
           <ul className="list-disc pl-6 mb-4">
+            <li>Filter one or more categories on the map.</li>
+            <li>Set/ remove a place as your home location.</li>
+            <li>Mark/ remove facilities as favorite places.</li>
             <li>
               To manage your account after registering, click on the user icon next to the sign-out button. You can see
               a manage page and work on it. You cannot directly change your favorite and home addresses on this page,
@@ -89,10 +92,16 @@ function Documentation() {
             The application ensures that the dataset is clean by removing duplicates, correcting errors, and handling
             missing values. Data formats are standardized for easy integration and analysis.
           </p>
-          <h3 className="mb-3 text-xl font-bold">Non-registered users can:</h3>
+          <p className="mb-3">Non-registered users can:</p>
           <ul className="list-disc pl-6 mb-4">
             <li>View the map.</li>
             <li>Search for places and view POI details in a popup.</li>
+          </ul>
+          <p className="mb-3">However, you have limited functionality:</p>
+          <ul className="list-disc pl-6">
+            <li>Cannot filter facilities.</li>
+            <li>Cannot set favorite or home addresses.</li>
+            <li>Cannot generate routes between home and facilities.</li>
           </ul>
         </section>
       </div>

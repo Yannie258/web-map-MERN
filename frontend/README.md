@@ -30,6 +30,7 @@ This app uses also some open libraries:
 ## Installation for frontend
 
 Install the dependencies and devDependencies and start the server.
+
 - Open git bah inside frontend directory and then run:
 
 ```sh
@@ -66,6 +67,8 @@ npm run dev
 ```sh
 127.0.0.1:3000
 ```
+
+> Note: when CORS happends, open app from live server in vs code
 
 ## License
 

@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN npm install
 
 # Install nodemon globally
-RUN npm install -g nodemon
+RUN npm install -g nodemon dotenv node-fetch fs path mongodb
 
 # Copy app files.
 COPY . .

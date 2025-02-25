@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema as _Schema, model } from 'mongoose';
+const Schema = _Schema;
 
 const UserSchema = new Schema({
     userName: {
@@ -29,6 +29,6 @@ const UserSchema = new Schema({
     }
   
 })
-module.exports = mongoose.model('Users', UserSchema, 'WEB_MAP_USERS')
+export default model('Users', UserSchema, 'WEB_MAP_USERS')
 //module.exports = mongoose.model("People", PersonSchema, "YOUR COLLECTION");
 // Third parameter should match to your collection name, for example db.<name>.

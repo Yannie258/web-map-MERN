@@ -52,7 +52,7 @@ JWT_SECRETE_KEY=
 
 * When use MongoDB Cloud:
 ```sh
-MONGO_URI=mongodb+srv://<username>:<password>@<hostname>/webmap
+MONGO_URI=mongodb+srv://<username>:<password>@<hostname>/web-map
 ```
 
 * When use MongoDB Compass

@@ -7,7 +7,7 @@ services:
       - "5000:5000"
     environment:
       - NODE_ENV=development
-      - MONGO_URL=mongodb://mongo:27017/webmap # Make sure to replace with your actual DB name
+      - MONGO_URL=mongodb+srv://${MONGO_DBUSER}:${MONGO_DBPASSWORD}@cluster0.xuonz.mongodb.net/web-map # Make sure to replace with your actual DB name
     volumes:
       - ./backend:/usr/src/app
     depends_on:
@@ -20,6 +20,8 @@ services:
       - map_networks
     ports:
       - "3000:3000"
+    depends_on:
+      - backend
     environment:
       - NODE_ENV=development
     volumes:

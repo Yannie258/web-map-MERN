@@ -1,22 +1,22 @@
-const User = require('../models/Users.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+import User, { findOne, findById, findByIdAndUpdate, find, findByIdAndDelete } from '../models/Users.model';
+import { genSalt, hash, compare } from 'bcrypt';
+import { sign, verify } from 'jsonwebtoken';
+import { config } from 'dotenv';
 
-dotenv.config();
+config();
 
 const privateKey = process.env.JWT_SECRETE_KEY;
 
-exports.createUser = async (req, res) => {
+export async function createUser(req, res) {
     try {
         // Check if the user already exists
-        const existingUser = await User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] });
+        const existingUser = await findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] });
         if (existingUser) {
             return res.status(409).json({ message: 'User already exists' });
         }
         //generate new password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        const salt = await genSalt(10);
+        const hashedPassword = await hash(req.body.password, salt);
         //create new user
         const newUser = new User({
             userName: req.body.userName,
@@ -30,21 +30,21 @@ exports.createUser = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'An internal server serror occurred: ', error: err.message });
     }
-};
+}
 
-exports.userLogin = async (req, res) => {
+export async function userLogin(req, res) {
     const { email, password } = req.body;
     try {
         // Find user by email
-        const user = await User.findOne({ email });
+        const user = await findOne({ email });
         if (!user) return res.status(401).json('User not found');
 
         // Validate password
-        const validPassword = await bcrypt.compare(password, user.password);
+        const validPassword = await compare(password, user.password);
         if (!validPassword) return res.status(401).json('Incorrect password');
 
         // Generate token
-        const token = jwt.sign({
+        const token = sign({
             email: user.email,
             id: user._id,
             userName: user.userName
@@ -58,14 +58,14 @@ exports.userLogin = async (req, res) => {
 
 }
 
-exports.getUserProfile = async (req, res) => { 
+export async function getUserProfile(req, res) { 
     const { token } = req.cookies;
     if (token) {
         try {
              //decrypt the token
-            await jwt.verify(token, process.env.JWT_SECRETE_KEY, {}, async (err, data) => {
+            await verify(token, process.env.JWT_SECRETE_KEY, {}, async (err, data) => {
                 if (err) throw err;
-                const { userName, email, _id, homeAddress, favourite } = await User.findById(data.id);
+                const { userName, email, _id, homeAddress, favourite } = await findById(data.id);
                 res.json({ userName, email, _id, homeAddress, favourite });
             });
         } catch (err) {
@@ -84,8 +84,8 @@ exports.getUserProfile = async (req, res) => {
     }
 }
 
-exports.editUserAccount = async(req, res) => { 
-    await User.findByIdAndUpdate(req.params.id,req.body, { new: true })
+export async function editUserAccount(req, res) { 
+    await findByIdAndUpdate(req.params.id,req.body, { new: true })
       .then((updatedUser) => {
         if (updatedUser) {
           res.status(201).json(updatedUser) // Respond with the updated user
@@ -98,19 +98,19 @@ exports.editUserAccount = async(req, res) => {
       })
 }
 
-exports.getAllUser = async (req,res)=>{
-    await User.find({})
+export async function getAllUser(req,res){
+    await find({})
         .then((persons) => {
             res.status(200).send(persons)
         })
     .catch((err)=>(res.status(500).send({ message: 'An internal server serror occurred: ', error: err.message })))
 }
 
-exports.getUser = async (req, res) => {
+export async function getUser(req, res) {
     const { field, value } = req.params;
     try {
     // Check if a user with the given field value exists
-    const user = await User.findOne({ [field]: value });
+    const user = await findOne({ [field]: value });
 
     // Return response indicating whether the user exists
     res.json({ exists: !!user }); // Send true if user exists, false otherwise
@@ -120,10 +120,10 @@ exports.getUser = async (req, res) => {
   }
 }
 
-exports.getUserById = async (req, res) => { 
+export async function getUserById(req, res) { 
     const { id } = req.params;
     try {
-        const user = await User.findById(id);
+        const user = await findById(id);
         if (user) {
             res.status(200).json(user);
         } else {
@@ -134,7 +134,7 @@ exports.getUserById = async (req, res) => {
     }
 }
 
-exports.userLogOut = async (req,res)=>{
+export async function userLogOut(req,res){
      try {
     // Clear the cookie
     await res.clearCookie('token');
@@ -144,9 +144,9 @@ exports.userLogOut = async (req,res)=>{
   }
 }
 
-exports.deleteUser = async (req, res) => {
+export async function deleteUser(req, res) {
     try {
-        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        const deletedUser = await findByIdAndDelete(req.params.id);
         if (deletedUser) {
             res.status(200).json({ message: 'User account deleted successfully' });
         } else {
@@ -158,10 +158,10 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
-exports.removeHome = async (req, res) => {
+export async function removeHome(req, res) {
     try {
         const userId = req.params.id;
-        const user = await User.findByIdAndUpdate(
+        const user = await findByIdAndUpdate(
         userId,
         { $unset: { homeAddress: 1 } },
         { new: true }
@@ -177,10 +177,10 @@ exports.removeHome = async (req, res) => {
   }
 }
 
-exports.removeFavourite = async (req, res) => {
+export async function removeFavourite(req, res) {
     try {
         const userId = req.params.id;
-        const user = await User.findByIdAndUpdate(
+        const user = await findByIdAndUpdate(
         userId,
         { $unset: { favourite: 1 } },
         { new: true }

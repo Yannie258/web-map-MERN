@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+import { Schema as _Schema, model } from 'mongoose';
+const Schema = _Schema
 
 const GeoSchema = new Schema({
     type: {
@@ -45,4 +45,4 @@ const CategoriesSchema = new Schema({
     geometry: GeoSchema
 });
 
-module.exports = mongoose.model('Categories', CategoriesSchema, 'WEB_MAP_CATEGORIES')
+export default model('Categories', CategoriesSchema, 'WEB_MAP_CATEGORIES')

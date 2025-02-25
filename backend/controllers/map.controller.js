@@ -1,13 +1,13 @@
-const express = require('express');
-const Categories = require('../models/Categories.model.js')
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+import express from 'express';
+import { find } from '../models/Categories.model.js';
+import jwt from 'jsonwebtoken';
+import { config } from 'dotenv';
 
-dotenv.config();
+config();
 
-exports.getAllCategories = async (req, res) => {
+export async function getAllCategories(req, res) {
     try {
-        const allCategories = await Categories.find();
+        const allCategories = await find();
         res.status(200).json(allCategories);
     } catch (error) {
         res.status(500).json(error);
